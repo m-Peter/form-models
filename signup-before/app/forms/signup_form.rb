@@ -7,9 +7,9 @@ class SignupForm
 	delegate :twitter_name, :github_name, :bio, to: :profile
 
 	validates_presence_of :username
-  validate :verify_unique_username
-  validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/
-  validates_length_of :password, minimum: 6
+	validate :verify_unique_username
+	validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/
+	validates_length_of :password, minimum: 6
 
 	def persisted?
 		false
@@ -43,22 +43,22 @@ class SignupForm
 	end
 
 	def subscribed
-  	user.subscribed_at
-  end
+		user.subscribed_at
+	end
 
-  def subscribed_at=(checkbox)
-  	user.subscribed_at = Time.zone.now if checkbox == "1"
-  end
+	def subscribed_at=(checkbox)
+		user.subscribed_at = Time.zone.now if checkbox == "1"
+	end
 
-  def generate_token
-  	begin
-  		user.token = SecureRandom.hex
-  	end while User.exists?(token: user.token)
-  end
+	def generate_token
+		begin
+			user.token = SecureRandom.hex
+		end while User.exists?(token: user.token)
+	end
 
-  def verify_unique_username
-  	if User.exists? username: username
-  		errors.add :username, "has already been taken"
-  	end
-  end
+	def verify_unique_username
+		if User.exists? username: username
+			errors.add :username, "has already been taken"
+		end
+	end
 end
