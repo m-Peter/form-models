@@ -14,6 +14,10 @@ class PasswordForm
     @user = user
   end
 
+  def to_model
+    self
+  end
+
   def submit(params)
     self.original_password = params[:original_password]
     self.new_password = params[:new_password]
