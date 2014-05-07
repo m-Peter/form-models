@@ -4,6 +4,7 @@ peter:
   id: 2
   email: markoupetr@gmail.com
   password_digest: <%= BCrypt::Password.create('secret') %>
+  username: 'm-peter'
 
 two:
   email: MyString

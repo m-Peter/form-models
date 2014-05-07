@@ -15,6 +15,10 @@ class SignupForm
     false
   end
 
+  def to_model
+    self
+  end
+
   def self.model_name
     ActiveModel::Name.new(self, nil, "User")
   end
