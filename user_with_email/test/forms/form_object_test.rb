@@ -50,9 +50,8 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_respond_to UserForm, :attributes
   end
 
-  test "can specify the root model of the form" do
-    #UserForm.root_model(:user)
-    #assert_equal :user, UserForm.root_model
+  test "can specify the main model of the form" do
+    assert_equal :user, UserForm.main_model
   end
 
   test "can specify to which model the attributes belong" do
