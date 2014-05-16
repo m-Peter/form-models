@@ -1,7 +1,10 @@
 module FormObject
   class Base
-    def self.attribute(attribute)
-      attr_accessor(attribute)
+    class << self
+      def attributes(*attributes)
+        attr_accessor(*attributes)
+      end
+      alias_method :attribute, :attributes
     end
   end
 end
