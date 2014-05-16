@@ -29,6 +29,7 @@ module FormObject
     end
 
     class << self
+      delegate :model_name, to: :main_class
       attr_accessor :main_class, :main_model
 
       def attributes(*attributes, of: nil)

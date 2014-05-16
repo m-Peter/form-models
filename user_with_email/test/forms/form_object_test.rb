@@ -112,4 +112,47 @@ class FormObjectTest < ActiveSupport::TestCase
       @user_form.save
     end
   end
+
+  test "can respond to persisted?" do
+    user = User.create!(name: "Petros", age: 23, gender: 0)
+    assert user.persisted?
+
+    user_form = UserForm.new(user: user)
+    assert user_form.persisted?
+  end
+
+  test "can respond to to_key" do
+    user = User.create!(name: "Petros", age: 23, gender: 0)
+    user_form = UserForm.new(user: user)
+
+    assert_equal user.to_key, user_form.to_key
+  end
+
+  test "can respond to to_model" do
+    user = User.create!(name: "Petros", age: 23, gender: 0)
+    user_form = UserForm.new(user: user)
+
+    assert_equal user, user_form.to_model
+  end
+
+  test "can respond to id" do
+    user = User.create!(name: "Petros", age: 23, gender: 0)
+    user_form = UserForm.new(user: user)
+
+    assert_equal user.id, user_form.id
+  end
+
+  test "can respond to to_param" do
+    user = User.create!(name: "Petros", age: 23, gender: 0)
+    user_form = UserForm.new(user: user)
+
+    assert_equal user.to_param, user_form.to_param
+  end
+
+  test "can respond to model_name" do
+    user = User.create!(name: "Petros", age: 23, gender: 0)
+    user_form = UserForm.new(user: user)
+
+    assert_equal User.model_name, UserForm.model_name
+  end
 end
