@@ -65,4 +65,13 @@ class ProfilTest < ActiveSupport::TestCase
     assert_equal @profile.name, update_params[:name]
     assert_equal @profile.email, update_params[:email]
   end
+
+  test "profile responds to model_name" do
+    assert_respond_to Profile, :model_name
+    assert_instance_of ActiveModel::Name, Profile.model_name
+    assert_equal "User", Profile.model_name.name
+    assert_equal "User", Profile.model_name.human
+    assert_equal "user", Profile.model_name.singular
+    assert_equal "users", Profile.model_name.plural
+  end
 end
