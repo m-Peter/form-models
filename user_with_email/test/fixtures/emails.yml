@@ -1,0 +1,6 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+peters_email:
+  address: markoupetr@gmail.com
+  confirmed: false
+  user: peter
