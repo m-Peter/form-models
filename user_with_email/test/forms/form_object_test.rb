@@ -4,13 +4,17 @@ class UserForm < FormObject::Base
   attributes :name, :age, of: :user
   attribute :gender, of: :user
   attribute :address, of: :email
+
+  self.main_model = :user
 end
 
 class FormObjectTest < ActiveSupport::TestCase
+  include ActiveModel::Lint::Tests
   def setup
     @user = User.new
     @email = Email.new
     @user_form = UserForm.new(user: @user, email: @email)
+    @model = @user_form
   end
 
   test "can specify attribute" do
@@ -44,6 +48,11 @@ class FormObjectTest < ActiveSupport::TestCase
   test "can respond to attribute and attributes" do
     assert_respond_to UserForm, :attribute
     assert_respond_to UserForm, :attributes
+  end
+
+  test "can specify the root model of the form" do
+    #UserForm.root_model(:user)
+    #assert_equal :user, UserForm.root_model
   end
 
   test "can specify to which model the attributes belong" do
