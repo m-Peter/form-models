@@ -9,6 +9,12 @@ module FormObject
       assign_from_hash(params)
     end
 
+    def save
+      ActiveRecord::Base.transaction do
+        call_action(:save!)
+      end
+    end
+
     class << self
       def attributes(*attributes, of: nil)
         if of.nil?
@@ -52,6 +58,16 @@ module FormObject
 
     def assign_from_hash(hash)
       hash.each { |key, value| send("#{key}=", value) }
+    end
+
+    def each_models
+      self.class.models.each do |model_name|
+        yield(send(model_name))
+      end
+    end
+
+    def call_action(action)
+      each_models(&action)
     end
 
   end
