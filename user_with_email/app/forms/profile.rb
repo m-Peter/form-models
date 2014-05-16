@@ -4,7 +4,6 @@ class Profile
   extend ActiveModel::Naming
 
   attr_reader :user
-  attr_reader :email
 
   delegate :name, :name=, :age, :age=, :gender, :gender=,
            :persisted?, :id, to: :user, prefix: false,
