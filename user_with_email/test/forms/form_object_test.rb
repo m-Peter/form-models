@@ -2,7 +2,7 @@ require 'test_helper'
 
 class UserForm < FormObject::Base
   attributes :name, :age, of: :user
-  attribute :gender
+  attribute :gender, of: :user
   attribute :address, of: :email
 end
 
@@ -65,5 +65,23 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal "Peter", user.name
     assert_equal 23, user.age
     assert_equal "markoupetr@gmail.com", email.address
+  end
+
+  test "can keep track of each model specified in the attributes directive" do
+    user = User.new
+    email = Email.new
+    user_form = UserForm.new(user: user, email: email)
+
+    assert_equal 2, UserForm.models.count
+    assert_equal [:user, :email], UserForm.models
+  end
+
+  test "should not add duplicate models" do
+    user = User.new
+    email = Email.new
+    user_form = UserForm.new(user: user, email: email)
+
+    assert_equal 2, UserForm.models.count
+    assert_equal [:user, :email], UserForm.models
   end
 end
