@@ -3,11 +3,12 @@ require 'test_helper'
 class UserForm < FormObject::Base
   attributes :name, :age, of: :user
   attribute :gender
+  attribute :address, of: :email
 end
 
 class FormObjectTest < ActiveSupport::TestCase
   def setup
-    @user_form = UserForm.new(User.new)
+    @user_form = UserForm.new(user: User.new)
   end
 
   test "can specify attribute" do
@@ -43,20 +44,26 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_respond_to UserForm, :attributes
   end
 
-  test "can specify a root model" do
-    user = User.new
-    user_form = UserForm.new(user)
-    
-    assert_equal user, user_form.root_model
-  end
-
   test "can specify to which model the attributes belong" do
     user = User.new
-    user_form = UserForm.new(user)
+    user_form = UserForm.new(user: user)
     user_form.name = "Peter"
     user_form.age = 23
 
     assert_equal "Peter", user.name
     assert_equal 23, user.age
+  end
+
+  test "can specify attributes for two different models" do
+    user = User.new
+    email = Email.new
+    user_form = UserForm.new(user: user, email: email)
+    user_form.name = "Peter"
+    user_form.age = 23
+    user_form.address = "markoupetr@gmail.com"
+
+    assert_equal "Peter", user.name
+    assert_equal 23, user.age
+    assert_equal "markoupetr@gmail.com", email.address
   end
 end

@@ -1,12 +1,8 @@
 module FormObject
   class Base
 
-    def initialize(root_model=nil)
-      @root_model = root_model
-    end
-
-    def root_model
-      @root_model
+    def initialize(attributes={})
+      assign_from_hash(attributes)
     end
 
     class << self
@@ -14,14 +10,36 @@ module FormObject
         if of.nil?
           attr_accessor(*attributes)
         else
-          attributes.each do |attribute|
-            delegate attribute, to: :root_model
-            delegate "#{attribute}=", to: :root_model
-          end
+          delegate_to_model(attributes, of)
         end
       end
 
       alias_method :attribute, :attributes
+
+      private
+
+      def delegate_to_model(attributes, of)
+        assign_delegators(attributes, of)
+        add_accessor(of)
+      end
+
+      def assign_delegators(attributes, model_name)
+        attributes.each do |attribute|
+          delegate attribute, to: model_name
+          delegate "#{attribute}=", to: model_name
+        end
+      end
+
+      def add_accessor(model_name)
+        attr_accessor model_name
+      end
     end
+
+    private
+
+    def assign_from_hash(hash)
+      hash.each { |key, value| send("#{key}=", value) }
+    end
+
   end
 end
