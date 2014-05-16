@@ -5,6 +5,10 @@ module FormObject
       assign_from_hash(attributes)
     end
 
+    def submit(params)
+      assign_from_hash(params)
+    end
+
     class << self
       def attributes(*attributes, of: nil)
         if of.nil?

@@ -84,4 +84,24 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal 2, UserForm.models.count
     assert_equal [:user, :email], UserForm.models
   end
+
+  test "can submit incoming params" do
+    user = User.new
+    email = Email.new
+    user_form = UserForm.new(user: user, email: email)
+
+    params = {
+      name: "Peter",
+      age: 22,
+      gender: 0,
+      address: "markoupetr@gmail.com"
+    }
+
+    user_form.submit(params)
+
+    assert_equal params[:name], user_form.name
+    assert_equal params[:age], user_form.age
+    assert_equal params[:gender], user_form.gender
+    assert_equal params[:address], user_form.address
+  end
 end
