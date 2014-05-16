@@ -1,8 +1,11 @@
 require 'test_helper'
 
 class ProfilTest < ActiveSupport::TestCase
+  include ActiveModel::Lint::Tests
+
   def setup
     @profile = Profile.new(User.new, Email.new)
+    @model = @profile
     @new_params = {
       name: "Petros",
       age: 23,
