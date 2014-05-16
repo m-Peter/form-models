@@ -6,6 +6,10 @@ module FormObject
 
     delegate :to_key, :id, :to_param, :persisted?, :to_model, to: :main_model
 
+    def self.model_name
+      User.model_name
+    end
+
     def initialize(attributes={})
       assign_from_hash(attributes)
     end
@@ -21,16 +25,17 @@ module FormObject
     end
 
     def main_model
-      if self.class.main_model.kind_of?(Symbol)
-        send(self.class.main_model)
-      else
-        self.class.main_model
-      end
+      send(self.class.root_model)
     end
 
     class << self
-      delegate :model_name, to: :main_class
-      attr_accessor :main_class, :main_model
+      def root_model=(model)
+        @root_model = model
+      end
+
+      def root_model
+        @root_model
+      end
 
       def attributes(*attributes, of: nil)
         if of.nil?
@@ -44,18 +49,6 @@ module FormObject
 
       def models
         @models ||= []
-      end
-
-      def main_model
-        @main_model ||= self
-      end
-
-      def main_class
-        @main_class ||= if main_model.kind_of?(Symbol)
-          main_model.to_s.camelize.constantize
-        else
-          @main_model
-        end
       end
 
       private

@@ -14,22 +14,24 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
-    @user_form = Profile.new(User.new, Email.new)
+    user = User.new
+    email = Email.new
+    @user_form = UserForm.new(user: user, email: email)
   end
 
   # GET /users/1/edit
   def edit
-    @user_form = Profile.new(@user, @user.email)
+    @user_form = UserForm.new(user: @user, email: @user.email)
   end
 
   # POST /users
   # POST /users.json
   def create
-    @user_form = Profile.new(User.new, Email.new)
-    @user_form.attributes = user_params
+    @user_form = UserForm.new(user: User.new, email: Email.new)
+    @user_form.submit(user_params)
 
     respond_to do |format|
-      if @user_form.save!
+      if @user_form.save
         format.html { redirect_to @user_form, notice: 'User was successfully created.' }
       else
         format.html { render :new }
@@ -40,10 +42,11 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    @user_form = Profile.new(@user, @user.email)
+    @user_form = UserForm.new(user: @user, email: @user.email)
+    @user_form.submit(user_params)
 
     respond_to do |format|
-      if @user_form.update(user_params)
+      if @user_form.save
         format.html { redirect_to @user, notice: 'User was successfully updated.' }
       else
         format.html { render :edit }
@@ -68,6 +71,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :age, :gender, :email)
+      params.require(:user).permit(:name, :age, :gender, :address)
     end
 end

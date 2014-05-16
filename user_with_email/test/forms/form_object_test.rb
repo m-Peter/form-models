@@ -5,7 +5,7 @@ class UserForm < FormObject::Base
   attribute :gender, of: :user
   attribute :address, of: :email
 
-  self.main_model = :user
+  self.root_model = :user
 end
 
 class FormObjectTest < ActiveSupport::TestCase
@@ -51,7 +51,8 @@ class FormObjectTest < ActiveSupport::TestCase
   end
 
   test "can specify the main model of the form" do
-    assert_equal :user, UserForm.main_model
+    assert_equal @user, @user_form.main_model
+    assert_equal :user, UserForm.root_model
   end
 
   test "can specify to which model the attributes belong" do
@@ -111,6 +112,10 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_difference("User.count") do
       @user_form.save
     end
+
+    assert @user.persisted?
+    assert @email.persisted?
+    assert_equal @user.email, @email
   end
 
   test "can respond to persisted?" do

@@ -18,7 +18,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
 
     assert_not_nil assigns(:user_form)
-    assert_kind_of Profile, assigns(:user_form)
+    assert_kind_of UserForm, assigns(:user_form)
   end
 
   test "should create user" do
@@ -27,12 +27,12 @@ class UsersControllerTest < ActionController::TestCase
       name: "Mariam",
       age: 21,
       gender: "1",
-      email: "mariam@gmail.com"
+      address: "mariam@gmail.com"
     }
     user_form = assigns(:user_form)
 
     assert_not_nil user_form
-    assert_kind_of Profile, user_form
+    assert_kind_of UserForm, user_form
     assert_redirected_to user_form.user
     assert_equal "User was successfully created.", flash[:notice]
   end
@@ -53,12 +53,12 @@ class UsersControllerTest < ActionController::TestCase
       name: "Marimar",
       age: 22,
       gender: "1",
-      email: "marimar@gmail.com"
+      address: "marimar@gmail.com"
     }
     user_form = assigns(:user_form)
 
     assert_not_nil user_form
-    assert_kind_of Profile, user_form
+    assert_kind_of UserForm, user_form
     assert_redirected_to user_form.user
     assert_equal "User was successfully updated.", flash[:notice]
   end
