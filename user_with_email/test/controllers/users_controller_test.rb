@@ -25,6 +25,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_select "form[class=?]", "new_user"
     assert_select "form[id=?]", "new_user"
     assert_select "form[method=?]", "post"
+    assert_select "form input[name=commit][value=?]", "Create User"
   end
 
   test "should create user" do
@@ -51,6 +52,16 @@ class UsersControllerTest < ActionController::TestCase
   test "should get edit" do
     get :edit, id: @user
     assert_response :success
+    assert_select ".field", 4
+    assert_select "form[action=?]", "#{users_path}/#{@user.id}"
+    assert_select "form[class=?]", "edit_user"
+    assert_select "form[id=?]", "edit_user_#{@user.id}"
+    assert_select "form[method=?]", "post"
+    assert_select "form input[id=user_name][value=?]", @user.name
+    assert_select "form input[id=user_age][value=?]", @user.age
+    assert_select "form select option[selected=selected][value=?]", @user.gender
+    assert_select "form input[id=user_address][value=?]", @user.email.address
+    assert_select "form input[name=commit][value=?]", "Update User"
   end
 
   test "should update user" do
