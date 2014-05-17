@@ -10,6 +10,7 @@ end
 
 class FormObjectTest < ActiveSupport::TestCase
   include ActiveModel::Lint::Tests
+  
   def setup
     @user = User.new
     @email = Email.new

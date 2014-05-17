@@ -19,6 +19,12 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_not_nil assigns(:user_form)
     assert_kind_of UserForm, assigns(:user_form)
+    assert_select "form input", 5
+    assert_select ".field", 4
+    assert_select "form[action=?]", "/users"
+    assert_select "form[class=?]", "new_user"
+    assert_select "form[id=?]", "new_user"
+    assert_select "form[method=?]", "post"
   end
 
   test "should create user" do
