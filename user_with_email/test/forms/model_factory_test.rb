@@ -54,9 +54,22 @@ class ModelFactoryTest < ActiveSupport::TestCase
   end
 
   test "can create populators for nested models" do
-    model = @factory.model
-    attrs = @factory.attributes.values.first
+    model = @factory.populate_model
 
-    #assert_equal [FormObject::Populator::HasOne], @factory.create_populators_for(model, attrs)
+    assert_equal "Petros", model.name
+    assert_equal 23, model.age
+    assert_equal 0, model.gender
+    assert_equal "cs3199@teilar.gr", model.email.address
+  end
+
+  test "can save all the models" do
+    model = @factory.populate_model
+
+    assert_difference("User.count") do
+      @factory.save!
+    end
+
+    assert model.persisted?
+    assert model.email.persisted?
   end
 end
