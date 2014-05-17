@@ -18,13 +18,13 @@ module FormObject
     end
 
     def submit(params)
-      assign_from_hash(params)
       @factory = ModelFactory.new(params)
+      @factory.populate_model
     end
 
     def save
       ActiveRecord::Base.transaction do
-        call_action(:save!)
+        @factory.save!
       end
     end
 

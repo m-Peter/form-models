@@ -24,11 +24,24 @@ class UsersController < ApplicationController
     @user_form = UserForm.new(user: @user, email: @user.email)
   end
 
+  def my_params
+    {
+      user: {
+        name: "m-peter",
+        age: 23,
+        gender: 0,
+        email_attributes: {
+          address: "markoupetr@gmail.com"
+        }
+      }
+    }
+  end
+
   # POST /users
   # POST /users.json
   def create
     @user_form = UserForm.new(user: User.new, email: Email.new)
-    @user_form.submit(user_params)
+    @user_form.submit(my_params)
 
     respond_to do |format|
       if @user_form.save
@@ -71,6 +84,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :age, :gender, :address)
+      params.require(:user).permit(:name, :age, :gender, email_attributes: [:address])
     end
 end

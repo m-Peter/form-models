@@ -86,26 +86,35 @@ class FormObjectTest < ActiveSupport::TestCase
 
   test "can submit incoming params" do
     params = {
-      name: "Petros",
-      age: 22,
-      gender: 0,
-      address: "markoupetr@gmail.com"
+      user: {
+        name: "Petros",
+        age: 22,
+        gender: 0,
+        email_attributes: {
+          address: "cs3199@teilar.gr"
+        }
+      }
     }
 
     @user_form.submit(params)
 
-    assert_equal params[:name], @user_form.name
-    assert_equal params[:age], @user_form.age
-    assert_equal params[:gender], @user_form.gender
-    assert_equal params[:address], @user_form.address
+    model = @user_form.factory.model
+    assert_equal "Petros", model.name
+    assert_equal 22, model.age
+    assert_equal 0, model.gender
+    assert_equal "cs3199@teilar.gr", model.email.address
   end
 
   test "can save the form" do
     params = {
-      name: "Petros",
-      age: 22,
-      gender: 0,
-      address: "cs3199@teilar.gr"
+      user: {
+        name: "Petros",
+        age: 22,
+        gender: 0,
+        email_attributes: {
+          address: "cs3199@teilar.gr"
+        }
+      }
     }
 
     @user_form.submit(params)
@@ -114,9 +123,10 @@ class FormObjectTest < ActiveSupport::TestCase
       @user_form.save
     end
 
-    assert @user.persisted?
-    assert @email.persisted?
-    # TODO assert_equal @user.email, @email
+    model = @user_form.factory.model
+
+    assert model.persisted?
+    assert model.email.persisted?
   end
 
   test "can respond to persisted?" do
@@ -164,14 +174,38 @@ class FormObjectTest < ActiveSupport::TestCase
 
   test "creates an model factory on submit" do
     params = {
-      name: "Petros",
-      age: 22,
-      gender: 0,
-      address: "cs3199@teilar.gr"
+      user: {
+        name: "Petros",
+        age: 22,
+        gender: 0,
+        email_attributes: {
+          address: "cs3199@teilar.gr"
+        }
+      }
     }
 
     @user_form.submit(params)
 
     assert_kind_of FormObject::ModelFactory, @user_form.factory
+  end
+
+  test "saves all the models" do
+    params = {
+      user: {
+        name: "Petros",
+        age: 23,
+        gender: 0,
+        email_attributes: {
+          address: "cs3199@teilar.gr"
+        }
+      }
+    }
+
+    @user_form.submit(params)
+    model = @user_form.factory.model
+
+    @user_form.save
+
+    assert_instance_of User, model
   end
 end
