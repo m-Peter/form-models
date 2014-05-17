@@ -1,9 +1,12 @@
+require "form_object/model_factory"
+
 module FormObject
   class Base
     include ActiveModel::Conversion
     include ActiveModel::Validations
     extend ActiveModel::Naming
 
+    attr_reader :factory
     delegate :to_key, :id, :to_param, :persisted?, :to_model, to: :main_model
 
     def self.model_name
@@ -16,6 +19,7 @@ module FormObject
 
     def submit(params)
       assign_from_hash(params)
+      @factory = ModelFactory.new(params)
     end
 
     def save
