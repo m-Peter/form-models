@@ -9,6 +9,10 @@ module FormObject
 
     def populate_model
       @model = create_root_model
+
+      populators = [Populator::Root.new(root_populator_args)]
+
+      @model
     end
 
     def root_populator_args
