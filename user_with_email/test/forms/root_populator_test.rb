@@ -10,7 +10,7 @@ class RootPopulatorTest < ActiveSupport::TestCase
         :name => "Petros",
         :age => 23,
         :gender => 0
-      },
+      }
     }
 
     @populator = FormObject::Populator::Root.new(@params)

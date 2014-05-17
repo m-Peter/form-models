@@ -1,12 +1,13 @@
 module FormObject
   module Populator
     class Abstract
-      attr_reader :model, :association_name, :pending_attributes
+      attr_reader :model, :association_name, :pending_attributes, :parent
 
       def initialize(args={})
         @model = args[:model]
         @association_name = args[:association_name]
         @pending_attributes = args[:attrs]
+        @parent = args[:parent]
       end
 
       def call

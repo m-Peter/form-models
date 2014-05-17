@@ -52,4 +52,11 @@ class ModelFactoryTest < ActiveSupport::TestCase
     assert_equal 23, model.age
     assert_equal 0, model.gender
   end
+
+  test "can create populators for nested models" do
+    model = @factory.model
+    attrs = @factory.attributes.values.first
+
+    #assert_equal [FormObject::Populator::HasOne], @factory.create_populators_for(model, attrs)
+  end
 end
