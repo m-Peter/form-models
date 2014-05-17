@@ -22,11 +22,7 @@ class AbstractPopulatorTest < ActiveSupport::TestCase
     assert_equal @params[:pending_attributes], @populator.pending_attributes
   end
 
-  test "it can populate the model with the attributes" do
-    @populator.call
-
-    assert_equal "Petros", @user.name
-    assert_equal 23, @user.age
-    assert_equal 0, @user.gender
+  test "it delegates the responsibility of assigning attributes to subclasses" do
+    assert_raises(NotImplementedError) { @populator.call }
   end
 end

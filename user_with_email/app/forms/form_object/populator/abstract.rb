@@ -11,6 +11,16 @@ module FormObject
 
       def call
         populate_model_attributes(model, pending_attributes)
+
+        if model.new_record?
+          assign_to_parent
+        end
+      end
+
+      protected
+
+      def assign_to_parent
+        raise NotImplementedError, "You have to implement this in your subclass"
       end
 
       def populate_model_attributes(model, attributes)
