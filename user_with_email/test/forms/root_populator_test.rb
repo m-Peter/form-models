@@ -6,7 +6,7 @@ class RootPopulatorTest < ActiveSupport::TestCase
     @params = {
       :model => @user,
       :association_name => :user,
-      :pending_attributes => {
+      :attrs => {
         :name => "Petros",
         :age => 23,
         :gender => 0

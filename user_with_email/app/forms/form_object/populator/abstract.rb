@@ -6,7 +6,7 @@ module FormObject
       def initialize(args={})
         @model = args[:model]
         @association_name = args[:association_name]
-        @pending_attributes = args[:pending_attributes]
+        @pending_attributes = args[:attrs]
       end
 
       def call
@@ -23,12 +23,14 @@ module FormObject
         raise NotImplementedError, "You have to implement this in your subclass"
       end
 
+      private
+
       def populate_model_attributes(model, attributes)
         populate_individual_record(model, attributes)
       end
 
       def populate_individual_record(record, attrs)
-        record.attributes = record.attributes.merge(attrs)
+        record.attributes = attrs
       end
     end
   end

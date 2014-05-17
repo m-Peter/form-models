@@ -44,4 +44,12 @@ class ModelFactoryTest < ActiveSupport::TestCase
     assert_equal attrs, args[:attrs]
     assert_equal :user, args[:association_name]
   end
+
+  test "root populator populates the root model" do
+    model = @factory.populate_model
+
+    assert_equal "Petros", model.name
+    assert_equal 23, model.age
+    assert_equal 0, model.gender
+  end
 end

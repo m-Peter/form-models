@@ -12,6 +12,10 @@ module FormObject
 
       populators = [Populator::Root.new(root_populator_args)]
 
+      populators.each do |p|
+        p.call
+      end
+
       @model
     end
 
