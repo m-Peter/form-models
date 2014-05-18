@@ -24,24 +24,14 @@ class UsersController < ApplicationController
     @user_form = UserForm.new(user: @user, email: @user.email)
   end
 
-  def my_params
-    {
-      user: {
-        name: "m-peter",
-        age: 23,
-        gender: 0,
-        email_attributes: {
-          address: "markoupetr@gmail.com"
-        }
-      }
-    }
-  end
-
   # POST /users
   # POST /users.json
   def create
     @user_form = UserForm.new(user: User.new, email: Email.new)
-    @user_form.submit(my_params)
+    params.delete("utf8")
+    params.delete("authenticity_token")
+    params.delete("commit")
+    @user_form.submit(params)
 
     respond_to do |format|
       if @user_form.save

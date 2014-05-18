@@ -2,13 +2,14 @@ module FormObject
   class ModelFactory
     attr_reader :attributes, :records_to_save, :model
 
-    def initialize(attributes)
+    def initialize(model, attributes)
       @attributes = attributes
       @records_to_save = []
+      @model = model
     end
 
     def populate_model
-      @model = create_root_model
+      #@model = create_root_model
 
       populators = [Populator::Root.new(root_populator_args)]
       populators.concat(

@@ -18,7 +18,7 @@ module FormObject
     end
 
     def submit(params)
-      @factory = ModelFactory.new(params)
+      @factory = ModelFactory.new(main_model, params)
       @factory.populate_model
     end
 
