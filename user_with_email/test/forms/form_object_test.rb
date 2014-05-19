@@ -12,6 +12,16 @@ class FormObjectTest < ActiveSupport::TestCase
   include ActiveModel::Lint::Tests
   
   def setup
+    @params = {
+      user: {
+        name: "Petros",
+        age: 22,
+        gender: 0,
+        email_attributes: {
+          address: "cs3199@teilar.gr"
+        }
+      }
+    }
     @user = User.new
     @email = Email.new
     @user_form = UserForm.new(user: @user, email: @email)
@@ -85,18 +95,7 @@ class FormObjectTest < ActiveSupport::TestCase
   end
 
   test "should submit incoming params" do
-    params = {
-      user: {
-        name: "Petros",
-        age: 22,
-        gender: 0,
-        email_attributes: {
-          address: "cs3199@teilar.gr"
-        }
-      }
-    }
-
-    @user_form.submit(params)
+    @user_form.submit(@params)
 
     model = @user_form.factory.model
     assert_equal "Petros", model.name
@@ -106,18 +105,7 @@ class FormObjectTest < ActiveSupport::TestCase
   end
 
   test "should save the form" do
-    params = {
-      user: {
-        name: "Petros",
-        age: 22,
-        gender: 0,
-        email_attributes: {
-          address: "cs3199@teilar.gr"
-        }
-      }
-    }
-
-    @user_form.submit(params)
+    @user_form.submit(@params)
 
     assert_difference("User.count") do
       @user_form.save
@@ -129,83 +117,71 @@ class FormObjectTest < ActiveSupport::TestCase
     assert model.email.persisted?
   end
 
-  test "should respond to persisted?" do
-    user = User.create!(name: "Petros", age: 23, gender: 0)
+  test "should respond to `persisted?`" do
+    user = create_user
     assert user.persisted?
 
-    user_form = UserForm.new(user: user)
+    user_form = user_form(user)
     assert user_form.persisted?
   end
 
   test "should respond to `to_key`" do
-    user = User.create!(name: "Petros", age: 23, gender: 0)
-    user_form = UserForm.new(user: user)
+    user = create_user
+    user_form = user_form(user)
 
     assert_equal user.to_key, user_form.to_key
   end
 
   test "should respond to `to_model`" do
-    user = User.create!(name: "Petros", age: 23, gender: 0)
-    user_form = UserForm.new(user: user)
+    user = create_user
+    user_form = user_form(user)
 
     assert_equal user, user_form.to_model
   end
 
   test "should respond to `id`" do
-    user = User.create!(name: "Petros", age: 23, gender: 0)
-    user_form = UserForm.new(user: user)
+    user = create_user
+    user_form = user_form(user)
 
     assert_equal user.id, user_form.id
   end
 
   test "should respond to `to_param`" do
-    user = User.create!(name: "Petros", age: 23, gender: 0)
-    user_form = UserForm.new(user: user)
+    user = create_user
+    user_form = user_form(user)
 
     assert_equal user.to_param, user_form.to_param
   end
 
   test "should respond to model_name" do
-    user = User.create!(name: "Petros", age: 23, gender: 0)
-    user_form = UserForm.new(user: user)
+    user = create_user
+    user_form = user_form(user)
 
     assert_equal User.model_name, UserForm.model_name
   end
 
   test "should create an model factory on submit" do
-    params = {
-      user: {
-        name: "Petros",
-        age: 22,
-        gender: 0,
-        email_attributes: {
-          address: "cs3199@teilar.gr"
-        }
-      }
-    }
-
-    @user_form.submit(params)
+    @user_form.submit(@params)
 
     assert_kind_of FormObject::ModelFactory, @user_form.factory
   end
 
   test "should save all the models" do
-    params = {
-      user: {
-        name: "Petros",
-        age: 23,
-        gender: 0,
-        email_attributes: {
-          address: "cs3199@teilar.gr"
-        }
-      }
-    }
-
-    @user_form.submit(params)
+    @user_form.submit(@params)
     model = @user_form.factory.model
 
     @user_form.save
 
     assert_instance_of User, model
   end
+
+  private
+
+    def create_user
+      User.create!(name: "Petros", age: 23, gender: 0)
+    end
+
+    def user_form(user)
+      UserForm.new(user: user)
+    end
 end
