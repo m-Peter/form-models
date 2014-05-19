@@ -7,7 +7,7 @@ module FormObject
     extend ActiveModel::Naming
 
     attr_reader :factory
-    delegate :to_key, :id, :to_param, :persisted?, :to_model, to: :main_model
+    delegate :to_key, :id, :to_param, :persisted?, :to_model, to: :root_model
 
     def self.model_name
       User.model_name
@@ -18,7 +18,7 @@ module FormObject
     end
 
     def submit(params)
-      @factory = ModelFactory.new(main_model, params)
+      @factory = ModelFactory.new(root_model, params)
       @factory.populate_model
     end
 
@@ -28,7 +28,7 @@ module FormObject
       end
     end
 
-    def main_model
+    def root_model
       send(self.class.root_model)
     end
 

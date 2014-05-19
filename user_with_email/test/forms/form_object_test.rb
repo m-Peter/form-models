@@ -18,14 +18,14 @@ class FormObjectTest < ActiveSupport::TestCase
     @model = @user_form
   end
 
-  test "can specify attribute" do
+  test "should specify attribute" do
     assert_respond_to @user_form, :name
 
     @user_form.name = "Petros"
     assert_equal "Petros", @user_form.name
   end
 
-  test "can specify attributes" do
+  test "should specify attributes" do
     assert_respond_to @user_form, :name
     assert_respond_to @user_form, :age
 
@@ -36,7 +36,7 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal 23, @user_form.age
   end
 
-  test "can use both attributes and attribute" do
+  test "should use both attributes and attribute" do
     @user_form.name = "Petros"
     @user_form.age = 23
     @user_form.gender = 0
@@ -46,17 +46,17 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal 0, @user_form.gender
   end
 
-  test "can respond to attribute and attributes" do
+  test "should respond to attribute and attributes" do
     assert_respond_to UserForm, :attribute
     assert_respond_to UserForm, :attributes
   end
 
-  test "can specify the main model of the form" do
-    assert_equal @user, @user_form.main_model
+  test "should specify the root model of the form" do
+    assert_equal @user, @user_form.root_model
     assert_equal :user, UserForm.root_model
   end
 
-  test "can specify to which model the attributes belong" do
+  test "should delegate the attributes to their model" do
     @user_form.name = "Petros"
     @user_form.age = 23
 
@@ -64,7 +64,7 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal 23, @user.age
   end
 
-  test "can specify attributes for two different models" do
+  test "should specify attributes for two different models" do
     @user_form.name = "Petros"
     @user_form.age = 23
     @user_form.address = "markoupetr@gmail.com"
@@ -74,7 +74,7 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal "markoupetr@gmail.com", @email.address
   end
 
-  test "can keep track of each model specified in the attributes directive" do
+  test "shoukd keep track of each model specified" do
     assert_equal 2, UserForm.models.count
     assert_equal [:user, :email], UserForm.models
   end
@@ -84,7 +84,7 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal [:user, :email], UserForm.models
   end
 
-  test "can submit incoming params" do
+  test "should submit incoming params" do
     params = {
       user: {
         name: "Petros",
@@ -105,7 +105,7 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal "cs3199@teilar.gr", model.email.address
   end
 
-  test "can save the form" do
+  test "should save the form" do
     params = {
       user: {
         name: "Petros",
@@ -129,7 +129,7 @@ class FormObjectTest < ActiveSupport::TestCase
     assert model.email.persisted?
   end
 
-  test "can respond to persisted?" do
+  test "should respond to persisted?" do
     user = User.create!(name: "Petros", age: 23, gender: 0)
     assert user.persisted?
 
@@ -137,42 +137,42 @@ class FormObjectTest < ActiveSupport::TestCase
     assert user_form.persisted?
   end
 
-  test "can respond to to_key" do
+  test "should respond to `to_key`" do
     user = User.create!(name: "Petros", age: 23, gender: 0)
     user_form = UserForm.new(user: user)
 
     assert_equal user.to_key, user_form.to_key
   end
 
-  test "can respond to to_model" do
+  test "should respond to `to_model`" do
     user = User.create!(name: "Petros", age: 23, gender: 0)
     user_form = UserForm.new(user: user)
 
     assert_equal user, user_form.to_model
   end
 
-  test "can respond to id" do
+  test "should respond to `id`" do
     user = User.create!(name: "Petros", age: 23, gender: 0)
     user_form = UserForm.new(user: user)
 
     assert_equal user.id, user_form.id
   end
 
-  test "can respond to to_param" do
+  test "should respond to `to_param`" do
     user = User.create!(name: "Petros", age: 23, gender: 0)
     user_form = UserForm.new(user: user)
 
     assert_equal user.to_param, user_form.to_param
   end
 
-  test "can respond to model_name" do
+  test "should respond to model_name" do
     user = User.create!(name: "Petros", age: 23, gender: 0)
     user_form = UserForm.new(user: user)
 
     assert_equal User.model_name, UserForm.model_name
   end
 
-  test "creates an model factory on submit" do
+  test "should create an model factory on submit" do
     params = {
       user: {
         name: "Petros",
@@ -189,7 +189,7 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_kind_of FormObject::ModelFactory, @user_form.factory
   end
 
-  test "saves all the models" do
+  test "should save all the models" do
     params = {
       user: {
         name: "Petros",
