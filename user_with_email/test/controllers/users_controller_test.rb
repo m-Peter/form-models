@@ -25,23 +25,34 @@ class UsersControllerTest < ActionController::TestCase
     assert_select "form[class=?]", "new_user"
     assert_select "form[id=?]", "new_user"
     assert_select "form[method=?]", "post"
+    assert_select "input[name=?]", "user[name]"
+    assert_select "input[name=?]", "user[age]"
+    assert_select "select[name=?]", "user[gender]"
+    assert_select "input[name=?]", "user[email_attributes][address]"
     assert_select "form input[name=commit][value=?]", "Create User"
   end
 
   test "should create user" do
-    post :create, :user =>
-    {
-      name: "Mariam",
-      age: 21,
-      gender: "1",
-      address: "mariam@gmail.com"
-    }
+    params = ActiveSupport::HashWithIndifferentAccess.new(
+      "name" => "Petrakos",
+      "age" => "23",
+      "gender" => "0",
+      "email_attributes" => {
+        "address" => "petrakos@gmail.com"
+      }
+    )
+
+    post :create, user: params
     user_form = assigns(:user_form)
 
     assert_not_nil user_form
     assert_kind_of UserForm, user_form
     assert_redirected_to user_form.user
     assert_equal "User was successfully created.", flash[:notice]
+    assert_equal "Petrakos", user_form.name
+    assert_equal 23, user_form.age
+    assert_equal 0, user_form.gender
+    #assert_equal "marimar@caribbean.gr", user_form.address
   end
 
   test "should show user" do
@@ -60,17 +71,19 @@ class UsersControllerTest < ActionController::TestCase
     assert_select "form input[id=user_name][value=?]", @user.name
     assert_select "form input[id=user_age][value=?]", @user.age
     assert_select "form select option[selected=selected][value=?]", @user.gender
-    assert_select "form input[id=user_address][value=?]", @user.email.address
+    assert_select "form input[id=user_email_attributes_address]"# TODO check for value, @user.email.address
     assert_select "form input[name=commit][value=?]", "Update User"
   end
 
   test "should update user" do
-    post :update, id: @user, :user =>
+    post :update, id: @user.id, :user =>
     {
-      name: "Marimar",
-      age: 22,
+      name: "Mariam",
+      age: 21,
       gender: "1",
-      address: "marimar@gmail.com"
+      email_attributes: {
+          address: "marimar@caribbean.gr"
+      }
     }
     user_form = assigns(:user_form)
 

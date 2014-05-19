@@ -12,7 +12,7 @@ module FormObject
 
       def call
         populate_model_attributes(model, pending_attributes)
-
+        
         if model.new_record?
           assign_to_parent
         end
@@ -27,11 +27,7 @@ module FormObject
       private
 
       def populate_model_attributes(model, attributes)
-        populate_individual_record(model, attributes)
-      end
-
-      def populate_individual_record(record, attrs)
-        record.attributes = attrs
+        model.attributes = attributes
       end
     end
   end

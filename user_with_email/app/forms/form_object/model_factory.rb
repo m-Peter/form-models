@@ -1,9 +1,10 @@
 module FormObject
   class ModelFactory
-    attr_reader :attributes, :records_to_save, :model
+    attr_reader :attributes, :records_to_save, :model, :populators
 
     def initialize(model, attributes)
-      @attributes = attributes
+      name = model.class.name.downcase.to_sym
+      @attributes = attributes.slice(name)
       @records_to_save = []
       @model = model
     end
@@ -11,24 +12,24 @@ module FormObject
     def populate_model
       #@model = create_root_model
 
-      populators = [Populator::Root.new(root_populator_args)]
-      populators.concat(
+      @populators = [Populator::Root.new(root_populator_args)]
+      @populators.concat(
         create_populators_for(model, attributes.values.first).flatten
       )
 
-      populators.each do |p|
+      @populators.each do |p|
         p.call
       end
-
+      
       @model
     end
 
     def root_populator_args
-      root_populator_args = {
+      root_populator_args = ActiveSupport::HashWithIndifferentAccess.new(
         :model => model,
         :attrs => params_for_current_scope(attributes.values.first),
         :association_name => attributes.keys.first
-      }
+      )
     end
 
     def save!

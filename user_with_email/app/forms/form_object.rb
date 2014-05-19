@@ -10,6 +10,7 @@ module FormObject
     delegate :to_key, :id, :to_param, :persisted?, :to_model, to: :root_model
 
     def self.model_name
+      #root_model.to_s.camelize.constantize.model_name
       User.model_name
     end
 

@@ -4,19 +4,19 @@ class HasOneTest < ActiveSupport::TestCase
   def setup
     @user = User.new
     @email = Email.new
-    @params = {
+    @params = ActiveSupport::HashWithIndifferentAccess.new(
       :model => @email,
       :association_name => :email,
       :parent => @user,
       :attrs => {
         :address => "markoupetr@gmail.com"
       }
-    }
+    )
 
     @populator = FormObject::Populator::HasOne.new(@params)
   end
 
-  test "can build the has one association of the parent" do
+  test "should build has_one association of the parent" do
     @populator.call
 
     assert_equal @email, @populator.model

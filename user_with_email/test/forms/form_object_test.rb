@@ -12,7 +12,8 @@ class FormObjectTest < ActiveSupport::TestCase
   include ActiveModel::Lint::Tests
   
   def setup
-    @params = {
+    @params = ActiveSupport::HashWithIndifferentAccess.new(
+      "utf8" => true,
       user: {
         name: "Petros",
         age: 22,
@@ -20,8 +21,10 @@ class FormObjectTest < ActiveSupport::TestCase
         email_attributes: {
           address: "cs3199@teilar.gr"
         }
-      }
-    }
+      },
+      "commit" => "Create User",
+      "controller" => "users"
+    )
     @user = User.new
     @email = Email.new
     @user_form = UserForm.new(user: @user, email: @email)

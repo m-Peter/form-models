@@ -28,11 +28,11 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user_form = UserForm.new(user: User.new, email: Email.new)
-    params.delete("utf8")
-    params.delete("authenticity_token")
-    params.delete("commit")
+    puts "I WAS HERE"
+    params.class.permit_all_parameters = true
+    puts "Permitted: #{params.permitted?}"
     @user_form.submit(params)
-
+    # DOES NOT RUN puts "AND WENT HERE"
     respond_to do |format|
       if @user_form.save
         format.html { redirect_to @user_form, notice: 'User was successfully created.' }
@@ -74,6 +74,7 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :age, :gender, email_attributes: [:address])
+      #params.require(:user).permit(:name, :age, :gender, email_attributes: [:address])
+      params.permit(:name, :age, :gender, email_attributes: [:address])
     end
 end

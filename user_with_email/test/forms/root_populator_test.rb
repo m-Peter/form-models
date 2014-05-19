@@ -3,7 +3,7 @@ require 'test_helper'
 class RootPopulatorTest < ActiveSupport::TestCase
   def setup
     @user = User.new
-    @params = {
+    @params = ActiveSupport::HashWithIndifferentAccess.new(
       :model => @user,
       :association_name => :user,
       :attrs => {
@@ -11,7 +11,7 @@ class RootPopulatorTest < ActiveSupport::TestCase
         :age => 23,
         :gender => 0
       }
-    }
+    )
 
     @populator = FormObject::Populator::Root.new(@params)
   end
