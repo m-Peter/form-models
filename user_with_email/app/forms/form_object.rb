@@ -7,11 +7,32 @@ module FormObject
     extend ActiveModel::Naming
 
     attr_reader :factory
-    delegate :to_key, :id, :to_param, :persisted?, :to_model, to: :root_model
 
     def self.model_name
       #root_model.to_s.camelize.constantize.model_name
       User.model_name
+    end
+
+    def persisted?
+      root_model.persisted?
+    end
+
+    def to_key
+      return nil unless persisted?
+      root_model.to_key
+    end
+
+    def to_model
+      root_model
+    end
+
+    def id
+      root_model.id
+    end
+
+    def to_param
+      return nil unless persisted?
+      root_model.id.to_s
     end
 
     def initialize(attributes={})

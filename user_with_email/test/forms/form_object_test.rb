@@ -129,9 +129,13 @@ class FormObjectTest < ActiveSupport::TestCase
   end
 
   test "should respond to `to_key`" do
-    user = create_user
+    user = User.new(name: "Petros", age: 23, gender: 0)
     user_form = user_form(user)
+    
+    assert_nil user_form.to_key
+    assert_equal user.to_key, user_form.to_key
 
+    user.save
     assert_equal user.to_key, user_form.to_key
   end
 
@@ -150,9 +154,12 @@ class FormObjectTest < ActiveSupport::TestCase
   end
 
   test "should respond to `to_param`" do
-    user = create_user
+    user = User.new(name: "Petros", age: 23, gender: 0)
     user_form = user_form(user)
 
+    assert_nil user_form.to_param
+
+    user.save
     assert_equal user.to_param, user_form.to_param
   end
 
