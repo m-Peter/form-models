@@ -31,14 +31,14 @@ class FormObjectTest < ActiveSupport::TestCase
     @model = @user_form
   end
 
-  test "should specify attribute" do
+  test "should specify single `.attribute`" do
     assert_respond_to @user_form, :name
 
     @user_form.name = "Petros"
     assert_equal "Petros", @user_form.name
   end
 
-  test "should specify attributes" do
+  test "should specify many `.attributes`" do
     assert_respond_to @user_form, :name
     assert_respond_to @user_form, :age
 
@@ -49,7 +49,7 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal 23, @user_form.age
   end
 
-  test "should use both attributes and attribute" do
+  test "should use both `.attributes` and `.attribute`" do
     @user_form.name = "Petros"
     @user_form.age = 23
     @user_form.gender = 0
@@ -59,17 +59,17 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal 0, @user_form.gender
   end
 
-  test "should respond to attribute and attributes" do
+  test "should respond to `.attribute` and `.attributes`" do
     assert_respond_to UserForm, :attribute
     assert_respond_to UserForm, :attributes
   end
 
-  test "should specify the root model of the form" do
+  test "should specify the `.root_model` of the form" do
     assert_equal @user, @user_form.root_model
     assert_equal :user, UserForm.root_model
   end
 
-  test "should delegate the attributes to their model" do
+  test "should delegate the `.attributes` to their models" do
     @user_form.name = "Petros"
     @user_form.age = 23
 
@@ -77,7 +77,7 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal 23, @user.age
   end
 
-  test "should specify attributes for two different models" do
+  test "should specify `.attributes` for two different models" do
     @user_form.name = "Petros"
     @user_form.age = 23
     @user_form.address = "markoupetr@gmail.com"
@@ -97,7 +97,7 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal [:user, :email], UserForm.models
   end
 
-  test "should submit incoming params" do
+  test "should `submit` incoming params" do
     @user_form.submit(@params)
 
     model = @user_form.factory.model
@@ -107,7 +107,7 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal "cs3199@teilar.gr", model.email.address
   end
 
-  test "should save the form" do
+  test "should `save` the form" do
     @user_form.submit(@params)
 
     assert_difference("User.count") do
@@ -156,20 +156,20 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal user.to_param, user_form.to_param
   end
 
-  test "should respond to model_name" do
+  test "should respond to `model_name`" do
     user = create_user
     user_form = user_form(user)
 
     assert_equal User.model_name, UserForm.model_name
   end
 
-  test "should create an model factory on submit" do
+  test "should create an model `factory` on submit" do
     @user_form.submit(@params)
 
     assert_kind_of FormObject::ModelFactory, @user_form.factory
   end
 
-  test "should save all the models" do
+  test "should `save` all the models" do
     @user_form.submit(@params)
     model = @user_form.factory.model
 
