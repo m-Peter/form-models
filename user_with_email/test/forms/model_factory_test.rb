@@ -110,6 +110,14 @@ class ModelFactoryTest < ActiveSupport::TestCase
     assert_equal 21, model.age
     assert_equal 1, model.gender
     assert_equal "marimar@caribbean.gr", model.email.address
+    models = []
+    @factory.populators.each do |pop|
+      models << pop.model
+    end
+
+    assert_equal 2, models.size
+    assert_instance_of User, models.first
+    assert_instance_of Email, models.last
   end
 
   test "can save all the models" do
