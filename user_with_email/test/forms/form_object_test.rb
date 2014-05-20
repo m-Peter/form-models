@@ -67,6 +67,8 @@ class FormObjectTest < ActiveSupport::TestCase
   test "should specify the `.root_model` of the form" do
     assert_equal @user, @user_form.root_model
     assert_equal :user, UserForm.root_model
+    assert_equal User, UserForm.root_model.to_s.camelize.constantize
+    assert_equal ActiveModel::Name.new(User), ActiveModel::Name.new(UserForm.root_model.to_s.camelize.constantize)
   end
 
   test "should delegate the `.attributes` to their models" do

@@ -9,8 +9,7 @@ module FormObject
     attr_reader :factory
 
     def self.model_name
-      #root_model.to_s.camelize.constantize.model_name
-      User.model_name
+      ActiveModel::Name.new(root_model.to_s.camelize.constantize)
     end
 
     def persisted?
@@ -56,11 +55,11 @@ module FormObject
 
     class << self
       def root_model=(model)
-        @root_model = model
+        @@root_model = model
       end
 
       def root_model
-        @root_model
+        @@root_model
       end
 
       def attributes(*attributes, of: nil)
