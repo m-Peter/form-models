@@ -32,10 +32,10 @@ class FormObjectTest < ActiveSupport::TestCase
   end
 
   test "should specify single `.attribute`" do
-    assert_respond_to @user_form, :name
+    assert_respond_to @user_form, :gender
 
-    @user_form.name = "Petros"
-    assert_equal "Petros", @user_form.name
+    @user_form.gender = 0
+    assert_equal 0, @user_form.gender
   end
 
   test "should specify many `.attributes`" do
@@ -66,17 +66,16 @@ class FormObjectTest < ActiveSupport::TestCase
 
   test "should specify the `.root_model` of the form" do
     assert_equal @user, @user_form.root_model
-    assert_equal :user, UserForm.root_model
-    assert_equal User, UserForm.root_model.to_s.camelize.constantize
-    assert_equal ActiveModel::Name.new(User), ActiveModel::Name.new(UserForm.root_model.to_s.camelize.constantize)
   end
 
   test "should delegate the `.attributes` to their models" do
     @user_form.name = "Petros"
     @user_form.age = 23
+    @user_form.gender = 0
 
     assert_equal "Petros", @user.name
     assert_equal 23, @user.age
+    assert_equal 0, @user.gender
   end
 
   test "should specify `.attributes` for two different models" do
@@ -123,21 +122,29 @@ class FormObjectTest < ActiveSupport::TestCase
   end
 
   test "should respond to `persisted?`" do
-    user = create_user
-    assert user.persisted?
-
+    user = User.new
     user_form = user_form(user)
+
+    assert_not user.persisted?
+    assert_not user_form.persisted?
+
+    user_form.submit(@params)
+    user_form.save
+
+    assert user.persisted?
     assert user_form.persisted?
   end
 
   test "should respond to `to_key`" do
-    user = User.new(name: "Petros", age: 23, gender: 0)
+    user = User.new
     user_form = user_form(user)
     
     assert_nil user_form.to_key
     assert_equal user.to_key, user_form.to_key
 
-    user.save
+    user_form.submit(@params)
+    user_form.save
+
     assert_equal user.to_key, user_form.to_key
   end
 
@@ -149,19 +156,24 @@ class FormObjectTest < ActiveSupport::TestCase
   end
 
   test "should respond to `id`" do
-    user = create_user
+    user = User.new
     user_form = user_form(user)
+
+    user_form.submit(@params)
+    user_form.save
 
     assert_equal user.id, user_form.id
   end
 
   test "should respond to `to_param`" do
-    user = User.new(name: "Petros", age: 23, gender: 0)
+    user = User.new
     user_form = user_form(user)
 
     assert_nil user_form.to_param
 
-    user.save
+    user_form.submit(@params)
+    user_form.save
+    
     assert_equal user.to_param, user_form.to_param
   end
 
