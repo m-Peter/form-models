@@ -2,5 +2,15 @@
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 
 require File.expand_path('../config/application', __FILE__)
+require 'rake/testtask'
 
+namespace :test do
+  desc "Test forms source"
+  Rake::TestTask.new(:forms) do |t|
+    t.libs << "test"
+    t.pattern = "test/forms/**/*_test.rb"
+  end
+end
+
+Rake::Task[:test].enhance { Rake::TestTask["test:forms"].invoke }
 Rails.application.load_tasks
