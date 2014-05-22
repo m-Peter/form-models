@@ -9,10 +9,22 @@ class UserForm
     @user = user
   end
 
+  def valid?
+    result = super
+    valid = model.valid? && result
+
+    model.errors.each do |attribute, error|
+      errors.add(attribute, error)
+    end
+
+    valid
+  end
+
   def submit(params)
     params.each do |key, value|
       send("#{key}=", value)
     end
+    valid?
   end
 
   def save

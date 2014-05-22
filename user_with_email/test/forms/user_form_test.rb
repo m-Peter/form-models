@@ -39,6 +39,21 @@ class UserFormTest < ActiveSupport::TestCase
     assert_equal @user_form.gender, params[:gender]
   end
 
+  test "submit should return true if the params are valid" do
+    params = { name: 'Petrakos', age: 23, gender: 0 }
+    result = @user_form.submit(params)
+
+    assert result
+  end
+
+  test "submit should return false for invalid params" do
+    params = { name: 'Petr', age: "12", gender: "male" }
+    result = @user_form.submit(params)
+
+    assert_not result
+    assert_includes @user.errors.messages[:name], "is too short (minimum is 6 characters)"
+  end
+
   test "should save the model" do
     params = { name: 'Petrakos', age: 23, gender: 0 }
     @user_form.submit(params)

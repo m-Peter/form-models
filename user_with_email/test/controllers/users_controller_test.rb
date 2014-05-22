@@ -30,6 +30,15 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal "User: Petrakos was successfully created.", flash[:notice]
   end
 
+  test "should not create user with invalid params" do
+    assert_difference('User.count', 0) do
+      post :create, user: { name: 'Petr', age: 23, gender: 0 }
+    end
+
+    assert_select "div#error_explanation h2", "1 error prohibited this user from being saved:"
+    assert_select "div#error_explanation ul li", "Name is too short (minimum is 6 characters)"
+  end
+
   test "should show user" do
     get :show, id: @user
     assert_response :success

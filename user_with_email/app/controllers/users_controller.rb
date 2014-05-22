@@ -28,10 +28,10 @@ class UsersController < ApplicationController
   def create
     @user = User.new
     @user_form = UserForm.new(@user)
-    @user_form.submit(user_params)
 
     respond_to do |format|
-      if @user_form.save
+      if @user_form.submit(user_params)
+        @user_form.save
         format.html { redirect_to @user_form, notice: "User: #{@user.name} was successfully created." }
       else
         format.html { render :new }
