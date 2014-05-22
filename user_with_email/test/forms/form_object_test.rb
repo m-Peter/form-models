@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class UserForm < FormObject::Base
+class UserFormFixture < FormObject::Base
   attributes :name, :age, of: :user
   attribute :gender, of: :user
   attribute :address, of: :email
@@ -27,7 +27,7 @@ class FormObjectTest < ActiveSupport::TestCase
     )
     @user = User.new
     @email = Email.new
-    @user_form = UserForm.new(user: @user, email: @email)
+    @user_form = UserFormFixture.new(user: @user, email: @email)
     @model = @user_form
   end
 
@@ -60,8 +60,8 @@ class FormObjectTest < ActiveSupport::TestCase
   end
 
   test "should respond to `.attribute` and `.attributes`" do
-    assert_respond_to UserForm, :attribute
-    assert_respond_to UserForm, :attributes
+    assert_respond_to UserFormFixture, :attribute
+    assert_respond_to UserFormFixture, :attributes
   end
 
   test "should specify the `.root_model` of the form" do
@@ -89,13 +89,13 @@ class FormObjectTest < ActiveSupport::TestCase
   end
 
   test "shoukd keep track of each model specified" do
-    assert_equal 2, UserForm.models.count
-    assert_equal [:user, :email], UserForm.models
+    assert_equal 2, UserFormFixture.models.count
+    assert_equal [:user, :email], UserFormFixture.models
   end
 
   test "should not add duplicate models" do
-    assert_equal 2, UserForm.models.count
-    assert_equal [:user, :email], UserForm.models
+    assert_equal 2, UserFormFixture.models.count
+    assert_equal [:user, :email], UserFormFixture.models
   end
 
   test "should `submit` incoming params" do
@@ -181,7 +181,7 @@ class FormObjectTest < ActiveSupport::TestCase
     user = create_user
     user_form = user_form(user)
 
-    assert_equal User.model_name, UserForm.model_name
+    assert_equal User.model_name, UserFormFixture.model_name
   end
 
   test "should create an model `factory` on submit" do
@@ -206,6 +206,6 @@ class FormObjectTest < ActiveSupport::TestCase
     end
 
     def user_form(user)
-      UserForm.new(user: user)
+      UserFormFixture.new(user: user)
     end
 end
