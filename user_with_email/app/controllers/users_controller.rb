@@ -15,10 +15,12 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     @user = User.new
+    @user_form = UserForm.new(@user)
   end
 
   # GET /users/1/edit
   def edit
+    @user_form = UserForm.new(@user)
   end
 
   # POST /users
