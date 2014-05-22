@@ -63,6 +63,19 @@ class UserFormTest < ActiveSupport::TestCase
     end
   end
 
+  test "should update the model" do
+    user = User.create!(name: 'Petrakos', age: 23, gender: 0)
+    user_form = UserForm.new(user)
+
+    user_form.submit({name: "Petros"})
+
+    assert_difference('User.count', 0) do
+      user_form.save
+    end
+
+    assert_equal "Petros", user_form.name
+  end
+
   class UserFormRenderingTest < ActionView::TestCase
     def form_for(*)
       @output_buffer = super

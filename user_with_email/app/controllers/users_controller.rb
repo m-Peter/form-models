@@ -42,9 +42,12 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    @user_form = UserForm.new(@user)
+
     respond_to do |format|
-      if @user.update user_params
-        format.html { redirect_to @user, notice: "User: #{@user.name} was successfully updated." }
+      if @user_form.submit user_params
+        @user_form.save
+        format.html { redirect_to @user_form, notice: "User: #{@user.name} was successfully updated." }
       else
         format.html { render :edit }
       end

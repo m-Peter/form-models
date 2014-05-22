@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class FormActionsTest < ActionDispatch::IntegrationTest
+  fixtures :users
+
   test "creating a user" do
     get "/users/new"
     assert_response :success
@@ -14,6 +16,24 @@ class FormActionsTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_response :success
     assert_equal "User: Petrakos was successfully created.", flash[:notice]
+    assert_template "show"
+  end
+
+  test "updating a user" do
+    peter = users(:peter)
+
+    get "/users/#{peter.id}/edit"
+    assert_response :success
+    assert_template "_form"
+
+    patch "/users/#{peter.id}", id: peter.id, :user => {
+      name: "Petran",
+      age: 24,
+      gender: 1
+    }
+    follow_redirect!
+    assert_response :success
+    assert_equal "User: Petran was successfully updated.", flash[:notice]
     assert_template "show"
   end
 
