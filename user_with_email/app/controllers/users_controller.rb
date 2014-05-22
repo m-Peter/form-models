@@ -14,26 +14,21 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
-    user = User.new
-    @user_form = UserForm.new(user: user)
+    @user = User.new
   end
 
   # GET /users/1/edit
   def edit
-    @user_form = UserForm.new(user: @user, email: @user.email)
   end
 
   # POST /users
   # POST /users.json
   def create
-    @user_form = UserForm.new(user: User.new, email: Email.new)
-    # This is a dirty-fix to check that it creates the models.
-    params.class.permit_all_parameters = true
-    @user_form.submit(params)
+    @user = User.new(user_params)
 
     respond_to do |format|
-      if @user_form.save
-        format.html { redirect_to @user_form, notice: 'User was successfully created.' }
+      if @user.save
+        format.html { redirect_to @user, notice: "User: #{@user.name} was successfully created." }
       else
         format.html { render :new }
       end
@@ -43,12 +38,9 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    @user_form = UserForm.new(user: @user, email: @user.email)
-    @user_form.submit(user_params)
-
     respond_to do |format|
-      if @user_form.save
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+      if @user.update user_params
+        format.html { redirect_to @user, notice: "User: #{@user.name} was successfully updated." }
       else
         format.html { render :edit }
       end
@@ -58,9 +50,10 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
+    name = @user.name
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
+      format.html { redirect_to users_url, notice: "User: #{name} was successfully destroyed." }
     end
   end
 
@@ -72,6 +65,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :age, :gender, email_attributes: [:address])
+      params.require(:user).permit(:name, :age, :gender)
     end
 end

@@ -16,43 +16,16 @@ class UsersControllerTest < ActionController::TestCase
     get :new
 
     assert_response :success
-
-    assert_not_nil assigns(:user_form)
-    assert_kind_of UserForm, assigns(:user_form)
-    assert_select "form input", 5
-    assert_select ".field", 4
-    assert_select "form[action=?]", "/users"
-    assert_select "form[class=?]", "new_user"
-    assert_select "form[id=?]", "new_user"
-    assert_select "form[method=?]", "post"
-    assert_select "input[name=?]", "user[name]"
-    assert_select "input[name=?]", "user[age]"
-    assert_select "select[name=?]", "user[gender]"
-    assert_select "input[name=?]", "user[email_attributes][address]"
-    assert_select "form input[name=commit][value=?]", "Create User"
+    assert_not_nil assigns(:user)
   end
 
   test "should create user" do
-    params = ActiveSupport::HashWithIndifferentAccess.new(
-      "name" => "Petrakos",
-      "age" => "23",
-      "gender" => "0",
-      "email_attributes" => {
-        "address" => "petrakos@gmail.com"
-      }
-    )
+    assert_difference('User.count') do
+      post :create, user: { name: 'Petrakos', age: 23, gender: 0 }
+    end
 
-    post :create, user: params
-    user_form = assigns(:user_form)
-
-    assert_not_nil user_form
-    assert_kind_of UserForm, user_form
-    assert_redirected_to user_form.user
-    assert_equal "User was successfully created.", flash[:notice]
-    assert_equal "Petrakos", user_form.name
-    assert_equal 23, user_form.age
-    assert_equal 0, user_form.gender
-    #assert_equal "marimar@caribbean.gr", user_form.address
+    assert_redirected_to user_path(assigns(:user))
+    assert_equal "User: Petrakos was successfully created.", flash[:notice]
   end
 
   test "should show user" do
@@ -63,7 +36,7 @@ class UsersControllerTest < ActionController::TestCase
   test "should get edit" do
     get :edit, id: @user
     assert_response :success
-    assert_select ".field", 4
+    assert_select ".field", 3
     assert_select "form[action=?]", "#{users_path}/#{@user.id}"
     assert_select "form[class=?]", "edit_user"
     assert_select "form[id=?]", "edit_user_#{@user.id}"
@@ -71,7 +44,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_select "form input[id=user_name][value=?]", @user.name
     assert_select "form input[id=user_age][value=?]", @user.age
     assert_select "form select option[selected=selected][value=?]", @user.gender
-    assert_select "form input[id=user_email_attributes_address]"# TODO check for value, @user.email.address
     assert_select "form input[name=commit][value=?]", "Update User"
   end
 
@@ -80,17 +52,12 @@ class UsersControllerTest < ActionController::TestCase
     {
       name: "Mariam",
       age: 21,
-      gender: "1",
-      email_attributes: {
-          address: "marimar@caribbean.gr"
-      }
+      gender: 1
     }
-    user_form = assigns(:user_form)
 
-    assert_not_nil user_form
-    assert_kind_of UserForm, user_form
-    assert_redirected_to user_form.user
-    assert_equal "User was successfully updated.", flash[:notice]
+    assert_equal "Mariam", assigns(:user).name
+    assert_redirected_to assigns(:user)
+    assert_equal "User: Mariam was successfully updated.", flash[:notice]
   end
 
   test "should destroy user" do
@@ -99,5 +66,6 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to users_path
+    assert_equal "User: #{@user.name} was successfully destroyed.", flash[:notice]
   end
 end
