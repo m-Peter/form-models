@@ -17,6 +17,8 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:user)
+    assert_not_nil assigns(:user_form)
+    assert_instance_of UserForm, assigns(:user_form)
   end
 
   test "should create user" do

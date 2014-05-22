@@ -30,6 +30,24 @@ class UserFormTest < ActiveSupport::TestCase
     assert_equal @user_form.gender, @user.gender
   end
 
+  test "should submit params" do
+    params = { name: 'Petrakos', age: 23, gender: 0 }
+    @user_form.submit(params)
+
+    assert_equal @user_form.name, params[:name]
+    assert_equal @user_form.age, params[:age]
+    assert_equal @user_form.gender, params[:gender]
+  end
+
+  test "should save the model" do
+    params = { name: 'Petrakos', age: 23, gender: 0 }
+    @user_form.submit(params)
+
+    assert_difference('User.count') do
+      @user_form.save
+    end
+  end
+
   class UserFormRenderingTest < ActionView::TestCase
     def form_for(*)
       @output_buffer = super

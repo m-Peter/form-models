@@ -9,6 +9,18 @@ class UserForm
     @user = user
   end
 
+  def submit(params)
+    params.each do |key, value|
+      send("#{key}=", value)
+    end
+  end
+
+  def save
+    ActiveRecord::Base.transaction do
+      model.save!
+    end
+  end
+
   def persisted?
     model.persisted?
   end

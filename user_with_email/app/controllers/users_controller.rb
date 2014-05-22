@@ -26,11 +26,13 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
-    @user = User.new(user_params)
+    @user = User.new
+    @user_form = UserForm.new(@user)
+    @user_form.submit(user_params)
 
     respond_to do |format|
-      if @user.save
-        format.html { redirect_to @user, notice: "User: #{@user.name} was successfully created." }
+      if @user_form.save
+        format.html { redirect_to @user_form, notice: "User: #{@user.name} was successfully created." }
       else
         format.html { render :new }
       end
