@@ -4,6 +4,8 @@ class UserFormFixture < FormObject::Base
   attribute :name, of: :user
   attributes :age, :gender, of: :user
   attribute :address, of: :email
+
+  self.root_model = :user
 end
 
 class FormObjectTest < ActiveSupport::TestCase
@@ -37,6 +39,11 @@ class FormObjectTest < ActiveSupport::TestCase
 
     assert_equal 23, @user_form.age
     assert_equal 0, @user_form.gender
+  end
+
+  test "specifies the root model" do
+    assert_equal :user, UserFormFixture.root_model
+    assert_equal @user, @user_form.root_model
   end
 
   test "delegates attribute to model" do

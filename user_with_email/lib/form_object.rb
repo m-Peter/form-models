@@ -40,7 +40,19 @@ module FormObject
       result
     end
 
+    def root_model
+      send(self.class.root_model)
+    end
+
     class << self
+      def root_model=(model)
+        @@root_model = model
+      end
+
+      def root_model
+        @@root_model
+      end
+
       def attributes(*names, of: nil)
         if of.nil?
           attr_accessor *names
