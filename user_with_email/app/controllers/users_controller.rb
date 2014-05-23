@@ -16,12 +16,12 @@ class UsersController < ApplicationController
   def new
     @user = User.new
     @email = Email.new
-    @user_form = UserForm.new(@user, @email)
+    @user_form = UserForm.new(user: @user, email: @email)
   end
 
   # GET /users/1/edit
   def edit
-    @user_form = UserForm.new(@user, @user.email)
+    @user_form = UserForm.new(user: @user, email: @user.email)
   end
 
   # POST /users
@@ -29,7 +29,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new
     @email = Email.new
-    @user_form = UserForm.new(@user, @email)
+    @user_form = UserForm.new(user: @user, email: @email)
 
     respond_to do |format|
       if @user_form.submit(user_params)
@@ -44,7 +44,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    @user_form = UserForm.new(@user, @user.email)
+    @user_form = UserForm.new(user: @user, email: @user.email)
 
     respond_to do |format|
       if @user_form.submit user_params
