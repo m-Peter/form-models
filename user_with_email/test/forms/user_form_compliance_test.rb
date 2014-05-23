@@ -4,46 +4,32 @@ class UserFormComplianceTest < ActiveSupport::TestCase
   include ActiveModel::Lint::Tests
 
   def setup
-    @model = UserForm.new(user: User.new, email: Email.new)
+    @user = User.new(name: 'Petrakos', age: 23, gender: 0)
+    @model = UserForm.new(user: @user, email: Email.new)
   end
 
   test "responds to #persisted?" do
-    user = User.new(name: 'Petrakos', age: 23, gender: 0)
-    user_form = UserForm.new(user: user, email: Email.new)
+    assert_not @model.persisted?
 
-    assert_not user_form.persisted?
-
-    user.save
-
-    assert user_form.persisted?
+    @user.save
+    assert @model.persisted?
   end
 
   test "responds to #to_key" do
-    user = User.new(name: 'Petrakos', age: 23, gender: 0)
-    user_form = UserForm.new(user: user, email: Email.new)
+    assert_nil @model.to_key
 
-    assert_nil user_form.to_key
-
-    user.save
-
-    assert_equal user.id, user_form.to_key
+    @user.save
+    assert_equal @user.id, @model.to_key
   end
 
   test "responds to #to_model" do
-    user = User.new(name: 'Petrakos', age: 23, gender: 0)
-    user_form = UserForm.new(user: user, email: Email.new)
-
-    assert_equal user, user_form.to_model
+    assert_equal @user, @model.to_model
   end
 
   test "responds to #to_param" do
-    user = User.new(name: 'Petrakos', age: 23, gender: 0)
-    user_form = UserForm.new(user: user, email: Email.new)
+    assert_nil @model.to_param
 
-    assert_nil user_form.to_param
-
-    user.save
-
-    assert_equal user.to_param, user_form.to_param
+    @user.save
+    assert_equal @user.to_param, @model.to_param
   end
 end
