@@ -32,11 +32,15 @@ class UsersControllerTest < ActionController::TestCase
 
   test "should not create user with invalid params" do
     assert_difference('User.count', 0) do
-      post :create, user: { name: 'Petr', age: 23, gender: 0 }
+      post :create, user: { name: 'Petr', age: 23, gender: 0, address: "petr" }
     end
 
-    assert_select "div#error_explanation h2", "1 error prohibited this user from being saved:"
-    assert_select "div#error_explanation ul li", "Name is too short (minimum is 6 characters)"
+    assert_select "div#error_explanation h2", "2 errors prohibited this user from being saved:"
+    assert_select "div#error_explanation ul li", 2
+    assert_select "div#error_explanation ul li" do |lis|
+      assert_select "li", "Name is too short (minimum is 6 characters)"
+      assert_select "li", "Address is invalid"
+    end
   end
 
   test "should show user" do

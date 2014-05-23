@@ -39,7 +39,7 @@ class FormActionsTest < ActionDispatch::IntegrationTest
     assert_template "show"
   end
 
-  test "displaying errors when user params are invalid" do
+  test "displaying errors when params are invalid" do
     get "/users/new"
     assert_response :success
     assert_template "_form"
@@ -47,11 +47,16 @@ class FormActionsTest < ActionDispatch::IntegrationTest
     post "/users", user: {
       name: "Petr",
       age: 23,
-      gender: 0
+      gender: 0,
+      address: "petr"
     }
     assert_response :success
     assert_template "new"
-    assert_select "div#error_explanation h2", "1 error prohibited this user from being saved:"
-    assert_select "div#error_explanation ul li", "Name is too short (minimum is 6 characters)"
+    assert_select "div#error_explanation h2", "2 errors prohibited this user from being saved:"
+    assert_select "div#error_explanation ul li", 2
+    assert_select "div#error_explanation ul li" do |lis|
+      assert_select "li", "Name is too short (minimum is 6 characters)"
+      assert_select "li", "Address is invalid"
+    end
   end
 end

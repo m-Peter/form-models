@@ -97,10 +97,11 @@ class UserFormTest < ActiveSupport::TestCase
   end
 
   test "should detect invalid params on nested model" do
-    params = { name: 'Petrakos', age: 23, gender: 0, address: 'markoupetr' }
+    params = { name: 'Petr', age: "12", gender: "male", address: 'markoupetr' }
     result = @user_form.submit(params)
 
     assert_not result
+    assert_includes @user_form.errors.messages[:name], "is too short (minimum is 6 characters)"
     assert_includes @user_form.errors.messages[:address], "is invalid"
   end
 
@@ -158,8 +159,10 @@ class UserFormTest < ActiveSupport::TestCase
     end
 
     test "form_for renders the values of persisted model" do
-      user = User.create!(name: "Petrakos", age: 23, gender: 0)
-      user_form = UserForm.new(user, Email.new)
+      user = User.new(name: "Petrakos", age: 23, gender: 0)
+      user.email = Email.new(address: "petrakos@gmail.com")
+      user.save!
+      user_form = UserForm.new(user, user.email)
 
       form_for user_form do |f|
         concat f.label(:name)
@@ -168,6 +171,8 @@ class UserFormTest < ActiveSupport::TestCase
         concat f.number_field(:age)
         concat f.label(:gender)
         concat f.select(:gender, User.get_genders_dropdown)
+        concat f.label(:address)
+        concat f.text_field(:address)
         concat f.submit('Update User')
       end
 
@@ -181,6 +186,7 @@ class UserFormTest < ActiveSupport::TestCase
       assert_match /<input id="user_name" name="user\[name\]" type="text" value="#{user.name}" \/>/, output_buffer
       assert_match /<input id="user_age" name="user\[age\]" type="number" value="#{user.age}" \/>/, output_buffer
       assert_match /<option selected="selected" value="0">Male<\/option>/, output_buffer
+      assert_match /<input id="user_address" name="user\[address\]" type="text" value="#{user.email.address}"/, output_buffer
       assert_match /<input name="commit" type="submit" value="Update User" \/>/, output_buffer
     end
   end

@@ -14,8 +14,8 @@ class UserForm
 
   def valid?
     result = super
-    valid = user.valid? && email.valid? && result
-
+    valid = user.valid? & email.valid? & result
+    
     user.errors.each do |attribute, error|
       errors.add(attribute, error)
     end
