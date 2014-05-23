@@ -45,7 +45,6 @@ class UserFormTest < ActiveSupport::TestCase
     result = @user_form.submit(params)
 
     assert result
-
   end
 
   test "submit should return false for invalid params" do
@@ -67,7 +66,8 @@ class UserFormTest < ActiveSupport::TestCase
 
   test "should update the model" do
     user = User.create!(name: 'Petrakos', age: 23, gender: 0)
-    user_form = UserForm.new(user, Email.new)
+    email = Email.create!(address: 'petrakos@gmail.com')
+    user_form = UserForm.new(user, email)
 
     user_form.submit({name: "Petros"})
 
@@ -102,6 +102,20 @@ class UserFormTest < ActiveSupport::TestCase
 
     assert_not result
     assert_includes @user_form.errors.messages[:address], "is invalid"
+  end
+
+  test "should save both models" do
+    params = { name: 'Petrakos', age: 23, gender: 0, address: "petrakos@gmail.com" }
+    @user_form.submit(params)
+
+    assert_difference('User.count') do
+      @user_form.save
+    end
+
+    assert @user_form.persisted?
+    assert @user.persisted?
+    assert @email.persisted?
+    assert_equal @email, @user.email
   end
 
   class UserFormRenderingTest < ActionView::TestCase

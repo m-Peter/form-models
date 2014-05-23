@@ -36,6 +36,7 @@ class UserForm
 
   def save
     ActiveRecord::Base.transaction do
+      user.email = email
       user.save!
     end
   end
