@@ -7,7 +7,7 @@ class UserFormRenderingTest < ActionView::TestCase
 
   test "form_for renders correctly with instance of UserForm" do
     user = User.new
-    user_form = UserForm.new(user, Email.new)
+    user_form = UserForm.new(user: user, email: Email.new)
 
     form_for user_form do |f|
       concat f.label(:name)
@@ -43,7 +43,7 @@ class UserFormRenderingTest < ActionView::TestCase
     user = User.new(name: "Petrakos", age: 23, gender: 0)
     user.email = Email.new(address: "petrakos@gmail.com")
     user.save!
-    user_form = UserForm.new(user, user.email)
+    user_form = UserForm.new(user: user, email: user.email)
 
     form_for user_form do |f|
       concat f.label(:name)

@@ -5,7 +5,7 @@ class UserFormTest < ActiveSupport::TestCase
   def setup
     @user = User.new
     @email = Email.new
-    @user_form = UserForm.new(@user, @email)
+    @user_form = UserForm.new(user: @user, email: @email)
   end
 
   test "should contain the objects it represents" do
@@ -76,7 +76,7 @@ class UserFormTest < ActiveSupport::TestCase
   test "should update the models" do
     user = User.create!(name: 'Petrakos', age: 23, gender: 0)
     email = Email.create!(address: 'petrakos@gmail.com')
-    user_form = UserForm.new(user, email)
+    user_form = UserForm.new(user: user, email: email)
 
     user_form.submit({name: "Petros", address: 'petran@gmail.com'})
 

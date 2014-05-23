@@ -1,38 +1,8 @@
 require "form_object"
 
 class UserForm < FormObject::Base
-
-  attr_reader :user, :email
-
-  delegate :name, :name=, :age, :age=, :gender, :gender=, to: :user
-  delegate :address, :address=, to: :email
-
-  def initialize(user, email)
-    @user = user
-    @email = email
-  end
-
-  def valid?
-    result = super
-    valid = user.valid? & email.valid? & result
-    
-    user.errors.each do |attribute, error|
-      errors.add(attribute, error)
-    end
-
-    email.errors.each do |attribute, error|
-      errors.add(attribute, error)
-    end
-
-    valid
-  end
-
-  def submit(params)
-    params.each do |key, value|
-      send("#{key}=", value)
-    end
-    valid?
-  end
+  attributes :name, :age, :gender, of: :user
+  attributes :address, of: :email
 
   def save
     ActiveRecord::Base.transaction do

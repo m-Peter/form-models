@@ -58,4 +58,30 @@ class FormObjectTest < ActiveSupport::TestCase
 
     assert_equal "markoupetr@gmail.com", @email.address
   end
+
+  test "keeps track of the models it represents" do
+    assert_equal 2, UserFormFixture.models.size
+    assert_equal [:user, :email], UserFormFixture.models
+  end
+
+  test "submits incoming parameters" do
+    params = { name: "Petros", age: 23, gender: 0, address: "markoupetr@gmail.com" }
+    @user_form.submit(params)
+
+    assert_equal "Petros", @user_form.name
+    assert_equal 23, @user_form.age
+    assert_equal 0, @user_form.gender
+    assert_equal "markoupetr@gmail.com", @user_form.address
+  end
+
+  test "performs validation" do
+    params = { name: "Petros", age: 23, gender: 0, address: "petrakos@gmail.com" }
+    @user_form.submit(params)
+
+    assert @user_form.valid?
+
+    @user_form.name = "Petr"
+
+    assert_not @user_form.valid?
+  end
 end
