@@ -23,7 +23,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test "should create user" do
     assert_difference('User.count') do
-      post :create, user: { name: 'Petrakos', age: 23, gender: 0 }
+      post :create, user: { name: 'Petrakos', age: 23, gender: 0, address: "petrakos@gmail.com" }
     end
 
     assert_redirected_to user_path(assigns(:user))
@@ -47,7 +47,7 @@ class UsersControllerTest < ActionController::TestCase
   test "should get edit" do
     get :edit, id: @user
     assert_response :success
-    assert_select ".field", 3
+    assert_select ".field", 4
     assert_select "form[action=?]", "#{users_path}/#{@user.id}"
     assert_select "form[class=?]", "edit_user"
     assert_select "form[id=?]", "edit_user_#{@user.id}"
@@ -55,6 +55,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_select "form input[id=user_name][value=?]", @user.name
     assert_select "form input[id=user_age][value=?]", @user.age
     assert_select "form select option[selected=selected][value=?]", @user.gender
+    assert_select "form input[id=user_address][value=?]", @user.email.address
     assert_select "form input[name=commit][value=?]", "Update User"
   end
 
@@ -63,10 +64,12 @@ class UsersControllerTest < ActionController::TestCase
     {
       name: "Mariam",
       age: 21,
-      gender: 1
+      gender: 1,
+      address: "marimar@caribbean.cr"
     }
 
     assert_equal "Mariam", assigns(:user).name
+    assert_equal "marimar@caribbean.cr", assigns(:user).email.address
     assert_redirected_to assigns(:user)
     assert_equal "User: Mariam was successfully updated.", flash[:notice]
   end

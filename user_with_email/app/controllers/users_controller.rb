@@ -15,19 +15,21 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     @user = User.new
-    @user_form = UserForm.new(@user)
+    @email = Email.new
+    @user_form = UserForm.new(@user, @email)
   end
 
   # GET /users/1/edit
   def edit
-    @user_form = UserForm.new(@user)
+    @user_form = UserForm.new(@user, @user.email)
   end
 
   # POST /users
   # POST /users.json
   def create
     @user = User.new
-    @user_form = UserForm.new(@user)
+    @email = Email.new
+    @user_form = UserForm.new(@user, @email)
 
     respond_to do |format|
       if @user_form.submit(user_params)
@@ -42,7 +44,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    @user_form = UserForm.new(@user)
+    @user_form = UserForm.new(@user, @user.email)
 
     respond_to do |format|
       if @user_form.submit user_params
@@ -72,6 +74,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :age, :gender)
+      params.require(:user).permit(:name, :age, :gender, :address)
     end
 end

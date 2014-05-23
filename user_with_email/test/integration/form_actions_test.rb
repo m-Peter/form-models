@@ -11,7 +11,8 @@ class FormActionsTest < ActionDispatch::IntegrationTest
     post "/users", user: {
       name: "Petrakos",
       age: 23,
-      gender: 0
+      gender: 0,
+      address: "petrakos@gmail.com"
     }
     follow_redirect!
     assert_response :success
@@ -29,7 +30,8 @@ class FormActionsTest < ActionDispatch::IntegrationTest
     patch "/users/#{peter.id}", id: peter.id, :user => {
       name: "Petran",
       age: 24,
-      gender: 1
+      gender: 1,
+      address: "petran@gmail.com"
     }
     follow_redirect!
     assert_response :success
