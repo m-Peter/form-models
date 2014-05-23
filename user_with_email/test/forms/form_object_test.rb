@@ -3,12 +3,14 @@ require 'test_helper'
 class UserFormFixture < FormObject::Base
   attribute :name, of: :user
   attributes :age, :gender, of: :user
+  attribute :address, of: :email
 end
 
 class FormObjectTest < ActiveSupport::TestCase
   def setup
     @user = User.new
-    @user_form = UserFormFixture.new(@user)
+    @email = Email.new
+    @user_form = UserFormFixture.new(user: @user, email: @email)
   end
 
   test "create a new FormObject" do
@@ -49,5 +51,11 @@ class FormObjectTest < ActiveSupport::TestCase
 
     assert_equal 23, @user.age
     assert_equal 0, @user.gender
+  end
+
+  test "delegate attributes to different models" do
+    @user_form.address = "markoupetr@gmail.com"
+
+    assert_equal "markoupetr@gmail.com", @email.address
   end
 end

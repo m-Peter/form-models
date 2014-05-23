@@ -4,10 +4,12 @@ module FormObject
     include ActiveModel::Validations
     extend ActiveModel::Naming
 
-    attr_accessor :user
+    def initialize(models={})
+      assign_from_hash(models)
+    end
 
-    def initialize(user)
-      @user = user
+    def assign_from_hash(hash)
+      hash.each { |key, value| send("#{key}=", value) }
     end
 
     class << self
@@ -16,9 +18,10 @@ module FormObject
           attr_accessor *names
         else
           names.each do |attribute|
-            delegate attribute, to: :user
-            delegate "#{attribute}=", to: :user
+            delegate attribute, to: of
+            delegate "#{attribute}=", to: of
           end
+          attr_accessor of
         end
       end
 
