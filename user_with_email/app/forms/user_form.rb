@@ -3,9 +3,10 @@ class UserForm
   include ActiveModel::Validations
   extend ActiveModel::Naming
 
+  attr_reader :user, :email
+
   delegate :name, :name=, :age, :age=, :gender, :gender=, to: :user
   delegate :address, :address=, to: :email
-  attr_reader :user, :email
 
   def initialize(user, email)
     @user = user
