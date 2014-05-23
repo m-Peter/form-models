@@ -3,17 +3,24 @@ class UserForm
   include ActiveModel::Validations
   extend ActiveModel::Naming
 
-  delegate :name, :name=, :age, :age=, :gender, :gender=, to: :model
+  delegate :name, :name=, :age, :age=, :gender, :gender=, to: :user
+  delegate :address, :address=, to: :email
+  attr_reader :user, :email
 
-  def initialize(user)
+  def initialize(user, email)
     @user = user
+    @email = email
   end
 
   def valid?
     result = super
-    valid = model.valid? && result
+    valid = user.valid? && email.valid? && result
 
-    model.errors.each do |attribute, error|
+    user.errors.each do |attribute, error|
+      errors.add(attribute, error)
+    end
+
+    email.errors.each do |attribute, error|
       errors.add(attribute, error)
     end
 
@@ -29,29 +36,25 @@ class UserForm
 
   def save
     ActiveRecord::Base.transaction do
-      model.save!
+      user.save!
     end
   end
 
   def persisted?
-    model.persisted?
+    user.persisted?
   end
 
   def to_key
     return nil unless persisted?
-    model.id
+    user.id
   end
 
   def to_model
-    model
+    user
   end
 
   def to_param
     return nil unless persisted?
-    model.id.to_s
-  end
-
-  def model
-    @user
+    user.id.to_s
   end
 end

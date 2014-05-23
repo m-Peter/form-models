@@ -5,11 +5,12 @@ class UserFormTest < ActiveSupport::TestCase
 
   def setup
     @user = User.new
-    @user_form = UserForm.new(@user)
+    @email = Email.new
+    @user_form = UserForm.new(@user, @email)
   end
 
   test "should contain the object it represents" do
-    assert_equal @user, @user_form.model
+    assert_equal @user, @user_form.user
   end
 
   test "should contain the attributes of the object" do
@@ -40,10 +41,11 @@ class UserFormTest < ActiveSupport::TestCase
   end
 
   test "submit should return true if the params are valid" do
-    params = { name: 'Petrakos', age: 23, gender: 0 }
+    params = { name: 'Petrakos', age: 23, gender: 0, address: "petrakos@gmail.com" }
     result = @user_form.submit(params)
 
     assert result
+
   end
 
   test "submit should return false for invalid params" do
@@ -65,7 +67,7 @@ class UserFormTest < ActiveSupport::TestCase
 
   test "should update the model" do
     user = User.create!(name: 'Petrakos', age: 23, gender: 0)
-    user_form = UserForm.new(user)
+    user_form = UserForm.new(user, Email.new)
 
     user_form.submit({name: "Petros"})
 
@@ -76,6 +78,32 @@ class UserFormTest < ActiveSupport::TestCase
     assert_equal "Petros", user_form.name
   end
 
+  test "should accept the nested model" do
+    assert_equal @user, @user_form.user
+    assert_equal @email, @user_form.email
+  end
+
+  test "should delegate attributes to the nested model" do
+    @user_form.address = "markoupetr@gmail.com"
+
+    assert_equal @email.address, @user_form.address
+  end
+
+  test "should submits parameters for both models" do
+    params = { name: 'Petrakos', age: 23, gender: 0, address: 'markoupetr@gmail.com' }
+    @user_form.submit(params)
+
+    assert_equal 'markoupetr@gmail.com', @user_form.address
+  end
+
+  test "should detect invalid params on nested model" do
+    params = { name: 'Petrakos', age: 23, gender: 0, address: 'markoupetr' }
+    result = @user_form.submit(params)
+
+    assert_not result
+    assert_includes @user_form.errors.messages[:address], "is invalid"
+  end
+
   class UserFormRenderingTest < ActionView::TestCase
     def form_for(*)
       @output_buffer = super
@@ -83,7 +111,7 @@ class UserFormTest < ActiveSupport::TestCase
 
     test "form_for renders correctly with instance of UserForm" do
       user = User.new
-      user_form = UserForm.new(user)
+      user_form = UserForm.new(user, Email.new)
 
       form_for user_form do |f|
         concat f.label(:name)
@@ -113,7 +141,7 @@ class UserFormTest < ActiveSupport::TestCase
 
     test "form_for renders the values of persisted model" do
       user = User.create!(name: "Petrakos", age: 23, gender: 0)
-      user_form = UserForm.new(user)
+      user_form = UserForm.new(user, Email.new)
 
       form_for user_form do |f|
         concat f.label(:name)

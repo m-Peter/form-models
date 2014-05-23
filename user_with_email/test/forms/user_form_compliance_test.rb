@@ -4,12 +4,12 @@ class UserFormComplianceTest < ActiveSupport::TestCase
   include ActiveModel::Lint::Tests
 
   def setup
-    @model = UserForm.new(User.new)
+    @model = UserForm.new(User.new, Email.new)
   end
 
   test "responds to #persisted?" do
     user = User.new(name: 'Petrakos', age: 23, gender: 0)
-    user_form = UserForm.new(user)
+    user_form = UserForm.new(user, Email.new)
 
     assert_not user_form.persisted?
 
@@ -20,7 +20,7 @@ class UserFormComplianceTest < ActiveSupport::TestCase
 
   test "responds to #to_key" do
     user = User.new(name: 'Petrakos', age: 23, gender: 0)
-    user_form = UserForm.new(user)
+    user_form = UserForm.new(user, Email.new)
 
     assert_nil user_form.to_key
 
@@ -31,14 +31,14 @@ class UserFormComplianceTest < ActiveSupport::TestCase
 
   test "responds to #to_model" do
     user = User.new(name: 'Petrakos', age: 23, gender: 0)
-    user_form = UserForm.new(user)
+    user_form = UserForm.new(user, Email.new)
 
     assert_equal user, user_form.to_model
   end
 
   test "responds to #to_param" do
     user = User.new(name: 'Petrakos', age: 23, gender: 0)
-    user_form = UserForm.new(user)
+    user_form = UserForm.new(user, Email.new)
 
     assert_nil user_form.to_param
 
