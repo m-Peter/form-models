@@ -10,22 +10,4 @@ class UserForm < FormObject::Base
       user.save!
     end
   end
-
-  def persisted?
-    user.persisted?
-  end
-
-  def to_key
-    return nil unless persisted?
-    user.id
-  end
-
-  def to_model
-    user
-  end
-
-  def to_param
-    return nil unless persisted?
-    user.id.to_s
-  end
 end

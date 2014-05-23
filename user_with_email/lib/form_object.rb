@@ -44,6 +44,24 @@ module FormObject
       send(self.class.root_model)
     end
 
+    def persisted?
+      root_model.persisted?
+    end
+
+    def to_key
+      return nil unless persisted?
+      root_model.id
+    end
+
+    def to_model
+      root_model
+    end
+
+    def to_param
+      return nil unless persisted?
+      root_model.id.to_s
+    end
+
     class << self
       def root_model=(model)
         @@root_model = model
