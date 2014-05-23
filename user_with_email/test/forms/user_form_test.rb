@@ -134,6 +134,8 @@ class UserFormTest < ActiveSupport::TestCase
         concat f.number_field(:age)
         concat f.label(:gender)
         concat f.select(:gender, User.get_genders_dropdown)
+        concat f.label(:address)
+        concat f.text_field(:address)
         concat f.submit('Create User')
       end
 
@@ -150,6 +152,8 @@ class UserFormTest < ActiveSupport::TestCase
       assert_match /<option value="0">Male<\/option>/, output_buffer
       assert_match /<option value="1">Female<\/option>/, output_buffer
       assert_match /<\/select>/, output_buffer
+      assert_match /<label for="user_address">Address<\/label>/, output_buffer
+      assert_match /<input id="user_address" name="user\[address\]" type="text" \/>/, output_buffer
       assert_match /<input name="commit" type="submit" value="Create User" \/>/, output_buffer
     end
 
