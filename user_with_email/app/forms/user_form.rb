@@ -1,7 +1,6 @@
-class UserForm
-  include ActiveModel::Conversion
-  include ActiveModel::Validations
-  extend ActiveModel::Naming
+require "form_object"
+
+class UserForm < FormObject::Base
 
   attr_reader :user, :email
 
