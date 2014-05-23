@@ -1,13 +1,14 @@
 require 'test_helper'
 
 class UserFormFixture < FormObject::Base
-  attribute :name
-  attributes :age, :gender
+  attribute :name, of: :user
+  attributes :age, :gender, of: :user
 end
 
 class FormObjectTest < ActiveSupport::TestCase
   def setup
-    @user_form = UserFormFixture.new
+    @user = User.new
+    @user_form = UserFormFixture.new(@user)
   end
 
   test "create a new FormObject" do
@@ -34,5 +35,19 @@ class FormObjectTest < ActiveSupport::TestCase
 
     assert_equal 23, @user_form.age
     assert_equal 0, @user_form.gender
+  end
+
+  test "delegates attribute to model" do
+    @user_form.name = "Peter"
+
+    assert_equal "Peter", @user.name
+  end
+
+  test "delegate attributes to model" do
+    @user_form.age = 23
+    @user_form.gender = 0
+
+    assert_equal 23, @user.age
+    assert_equal 0, @user.gender
   end
 end
