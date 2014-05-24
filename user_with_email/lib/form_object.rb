@@ -14,7 +14,9 @@ module FormObject
       params.each do |key, value|
         send("#{key}=", value) if self.respond_to?(key)
       end
-      @factory = ModelFactory.new
+      
+      name = self.class.root_model
+      @factory = ModelFactory.new(params.slice(name))
     end
 
     def valid?

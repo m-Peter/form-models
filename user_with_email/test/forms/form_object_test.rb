@@ -112,4 +112,22 @@ class FormObjectTest < ActiveSupport::TestCase
     @user_form.submit(params)
     assert_instance_of FormObject::ModelFactory, @user_form.factory
   end
+
+  test "factory contains only the relevant values from params" do
+    params = ActiveSupport::HashWithIndifferentAccess.new(
+      "utf-8" => true,
+      "authenticity_token" => "some_token",
+      "user" => {
+        "name" => "Petrakos",
+        "age" => "23",
+        "gender" => "0",
+        "email_attributes" => {
+          "address" => "petrakos@gmail.com"
+        }
+      }
+    )
+
+    @user_form.submit(params)
+    assert_equal params.slice("user"), @user_form.factory.attributes
+  end
 end
