@@ -94,4 +94,22 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_includes @user_form.errors.messages[:name], "is too short (minimum is 6 characters)"
     assert_includes @user_form.errors.messages[:address], "is invalid"
   end
+
+  test "submit creates the ModelFactory from the params" do
+    params = ActiveSupport::HashWithIndifferentAccess.new(
+      "utf-8" => true,
+      "authenticity_token" => "some_token",
+      "user" => {
+        "name" => "Petrakos",
+        "age" => "23",
+        "gender" => "0",
+        "email_attributes" => {
+          "address" => "petrakos@gmail.com"
+        }
+      }
+    )
+
+    @user_form.submit(params)
+    assert_instance_of FormObject::ModelFactory, @user_form.factory
+  end
 end

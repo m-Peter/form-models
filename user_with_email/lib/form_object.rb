@@ -4,16 +4,17 @@ module FormObject
     include ActiveModel::Validations
     extend ActiveModel::Naming
 
+    attr_reader :factory
+
     def initialize(models={})
       assign_from_hash(models)
     end
 
     def submit(params)
       params.each do |key, value|
-        send("#{key}=", value)
+        send("#{key}=", value) if self.respond_to?(key)
       end
-
-      #valid?
+      @factory = ModelFactory.new
     end
 
     def valid?
