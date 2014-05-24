@@ -12,7 +12,7 @@ class ModelFactoryTest < ActiveSupport::TestCase
         }
       }
     )
-
+    
     @factory = FormObject::ModelFactory.new(@params)
   end
 
@@ -44,5 +44,14 @@ class ModelFactoryTest < ActiveSupport::TestCase
     assert_equal "Petrakos", model.name
     assert_equal 23, model.age
     assert_equal 0, model.gender
+  end
+
+  test "populates the nested model" do
+    model = @factory.populate_model
+
+    assert_equal "Petrakos", model.name
+    assert_equal 23, model.age
+    assert_equal 0, model.gender
+    assert_equal "petrakos@gmail.com", model.email.address
   end
 end

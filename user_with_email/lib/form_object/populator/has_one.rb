@@ -1,8 +1,8 @@
 module FormObject
   module Populator
-    class RootPopulator < Abstract
+    class HasOne < Abstract
       def assign_to_parent
-        # no-op
+        parent.send("#{association_name}=", model)
       end
     end
   end
