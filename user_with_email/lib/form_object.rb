@@ -5,15 +5,7 @@ module FormObject
     extend ActiveModel::Naming
 
     def initialize(models={})
-      @models ||= []
       assign_from_hash(models)
-    end
-
-    def assign_from_hash(hash)
-      hash.each do |key, value|
-        @models << value unless @models.include?(value)
-        send("#{key}=", value)
-      end
     end
 
     def submit(params)
@@ -62,6 +54,23 @@ module FormObject
       root_model.id.to_s
     end
 
+    private
+
+      def assign_from_hash(hash)
+        hash.each do |key, value|
+          add_model_on_list(value)
+          send("#{key}=", value)
+        end
+      end
+
+      def models
+        @models ||= []
+      end
+
+      def add_model_on_list(model)
+        models << model
+      end
+
     class << self
       def root_model=(model)
         @@root_model = model
@@ -79,32 +88,35 @@ module FormObject
         end
       end
 
-      def delegate_to_model(attributes, of)
-        assign_delegators(attributes, of)
-        add_model_on_list(of)
-        add_accessor(of)
-      end
-
-      def add_accessor(model_name)
-        attr_accessor model_name
-      end
-
-      def assign_delegators(attributes, model_name)
-        attributes.each do |attribute|
-          delegate attribute, to: model_name
-          delegate "#{attribute}=", to: model_name
-        end
-      end
-
-      def add_model_on_list(model_name)
-        models << model_name unless models.include?(model_name)
-      end
+      alias_method :attribute, :attributes
 
       def models
         @models ||= []
       end
 
-      alias_method :attribute, :attributes
+      private
+
+        def delegate_to_model(attributes, of)
+          assign_delegators(attributes, of)
+          add_model_on_list(of)
+          add_accessor(of)
+        end
+
+        def add_accessor(model_name)
+          attr_accessor model_name
+        end
+
+        def assign_delegators(attributes, model_name)
+          attributes.each do |attribute|
+            delegate attribute, to: model_name
+            delegate "#{attribute}=", to: model_name
+          end
+        end
+
+        def add_model_on_list(model_name)
+          models << model_name unless models.include?(model_name)
+        end
+
     end
 
   end
