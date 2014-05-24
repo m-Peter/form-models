@@ -10,6 +10,18 @@ end
 
 class FormObjectTest < ActiveSupport::TestCase
   def setup
+    @params = ActiveSupport::HashWithIndifferentAccess.new(
+      "utf-8" => true,
+      "authenticity_token" => "some_token",
+      "user" => {
+        "name" => "Petrakos",
+        "age" => "23",
+        "gender" => "0",
+        "email_attributes" => {
+          "address" => "petrakos@gmail.com"
+        }
+      }
+    )
     @user = User.new
     @email = Email.new
     @user_form = UserFormFixture.new(user: @user, email: @email)
@@ -72,8 +84,7 @@ class FormObjectTest < ActiveSupport::TestCase
   end
 
   test "submits incoming parameters" do
-    params = { name: "Petros", age: 23, gender: 0, address: "markoupetr@gmail.com" }
-    @user_form.submit(params)
+    @user_form.submit(@params)
 
     assert_equal "Petros", @user_form.name
     assert_equal 23, @user_form.age
@@ -82,8 +93,7 @@ class FormObjectTest < ActiveSupport::TestCase
   end
 
   test "performs validation" do
-    params = { name: "Petros", age: 23, gender: 0, address: "petrakos@gmail.com" }
-    @user_form.submit(params)
+    @user_form.submit(@params)
 
     assert @user_form.valid?
 
@@ -96,38 +106,17 @@ class FormObjectTest < ActiveSupport::TestCase
   end
 
   test "submit creates the ModelFactory from the params" do
-    params = ActiveSupport::HashWithIndifferentAccess.new(
-      "utf-8" => true,
-      "authenticity_token" => "some_token",
-      "user" => {
-        "name" => "Petrakos",
-        "age" => "23",
-        "gender" => "0",
-        "email_attributes" => {
-          "address" => "petrakos@gmail.com"
-        }
-      }
-    )
-
-    @user_form.submit(params)
+    @user_form.submit(@params)
     assert_instance_of FormObject::ModelFactory, @user_form.factory
   end
 
   test "factory contains only the relevant values from params" do
-    params = ActiveSupport::HashWithIndifferentAccess.new(
-      "utf-8" => true,
-      "authenticity_token" => "some_token",
-      "user" => {
-        "name" => "Petrakos",
-        "age" => "23",
-        "gender" => "0",
-        "email_attributes" => {
-          "address" => "petrakos@gmail.com"
-        }
-      }
-    )
+    @user_form.submit(@params)
+    assert_equal @params.slice("user"), @user_form.factory.attributes
+  end
 
-    @user_form.submit(params)
-    assert_equal params.slice("user"), @user_form.factory.attributes
+  test "factory populates the root model" do
+    @user_form.submit(@params)
+    assert_instance_of User, @user_form.factory.model
   end
 end

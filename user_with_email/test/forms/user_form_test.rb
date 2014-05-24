@@ -3,6 +3,18 @@ require 'test_helper'
 class UserFormTest < ActiveSupport::TestCase
 
   def setup
+    @params = ActiveSupport::HashWithIndifferentAccess.new(
+      "utf-8" => true,
+      "authenticity_token" => "some_token",
+      "user" => {
+        "name" => "Petrakos",
+        "age" => "23",
+        "gender" => "0",
+        "email_attributes" => {
+          "address" => "petrakos@gmail.com"
+        }
+      }
+    )
     @user = User.new
     @email = Email.new
     @user_form = UserForm.new(user: @user, email: @email)
@@ -34,25 +46,25 @@ class UserFormTest < ActiveSupport::TestCase
   end
 
   test "should submit params" do
-    params = { name: 'Petrakos', age: 23, gender: 0, address: 'petrakos@gmail.com' }
-    @user_form.submit(params)
+    #params = { name: 'Petrakos', age: 23, gender: 0, address: 'petrakos@gmail.com' }
+    @user_form.submit(@params)
 
-    assert_equal @user_form.name, params[:name]
-    assert_equal @user_form.age, params[:age]
-    assert_equal @user_form.gender, params[:gender]
-    assert_equal @user_form.address, params[:address]
+    assert_equal @user_form.name, @params[:name]
+    assert_equal @user_form.age, @params[:age]
+    assert_equal @user_form.gender, @params[:gender]
+    assert_equal @user_form.address, @params[:address]
   end
 
   test "submit should return true if the params are valid" do
-    params = { name: 'Petrakos', age: 23, gender: 0, address: "petrakos@gmail.com" }
-    result = @user_form.submit(params)
+    #params = { name: 'Petrakos', age: 23, gender: 0, address: "petrakos@gmail.com" }
+    result = @user_form.submit(@params)
 
     assert result
   end
 
   test "#valid? should return false for invalid params" do
-    params = { name: 'Petr', age: "12", gender: "male", address: 'petr' }
-    @user_form.submit(params)
+    #params = { name: 'Petr', age: "12", gender: "male", address: 'petr' }
+    @user_form.submit(@params)
 
     assert_not @user_form.valid?
     assert_includes @user_form.errors.messages[:name], "is too short (minimum is 6 characters)"
@@ -60,8 +72,8 @@ class UserFormTest < ActiveSupport::TestCase
   end
 
   test "should save the models" do
-    params = { name: 'Petrakos', age: 23, gender: 0, address: 'petrakos@gmail.com' }
-    @user_form.submit(params)
+    #params = { name: 'Petrakos', age: 23, gender: 0, address: 'petrakos@gmail.com' }
+    @user_form.submit(@params)
 
     assert_difference('User.count') do
       @user_form.save
@@ -78,7 +90,7 @@ class UserFormTest < ActiveSupport::TestCase
     email = Email.create!(address: 'petrakos@gmail.com')
     user_form = UserForm.new(user: user, email: email)
 
-    user_form.submit({name: "Petros", address: 'petran@gmail.com'})
+    user_form.submit(@params)
 
     assert_difference('User.count', 0) do
       user_form.save
