@@ -30,9 +30,10 @@ class UsersController < ApplicationController
     @user = User.new
     @email = Email.new
     @user_form = UserForm.new(user: @user, email: @email)
+    @user_form.submit(user_params)
 
     respond_to do |format|
-      if @user_form.submit(user_params)
+      if @user_form.valid?
         @user_form.save
         format.html { redirect_to @user_form, notice: "User: #{@user.name} was successfully created." }
       else
@@ -45,9 +46,10 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
     @user_form = UserForm.new(user: @user, email: @user.email)
+    @user_form.submit user_params
 
     respond_to do |format|
-      if @user_form.submit user_params
+      if @user_form.valid?
         @user_form.save
         format.html { redirect_to @user_form, notice: "User: #{@user.name} was successfully updated." }
       else

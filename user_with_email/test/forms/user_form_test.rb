@@ -50,11 +50,11 @@ class UserFormTest < ActiveSupport::TestCase
     assert result
   end
 
-  test "submit should return false for invalid params" do
+  test "#valid? should return false for invalid params" do
     params = { name: 'Petr', age: "12", gender: "male", address: 'petr' }
-    result = @user_form.submit(params)
+    @user_form.submit(params)
 
-    assert_not result
+    assert_not @user_form.valid?
     assert_includes @user_form.errors.messages[:name], "is too short (minimum is 6 characters)"
     assert_includes @user_form.errors.messages[:address], "is invalid"
   end

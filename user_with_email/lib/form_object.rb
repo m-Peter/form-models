@@ -13,7 +13,7 @@ module FormObject
         send("#{key}=", value)
       end
 
-      valid?
+      #valid?
     end
 
     def valid?
