@@ -88,7 +88,10 @@ class FormObjectTest < ActiveSupport::TestCase
     assert @user_form.valid?
 
     @user_form.name = "Petr"
+    @user_form.address = "petrakos"
 
     assert_not @user_form.valid?
+    assert_includes @user_form.errors.messages[:name], "is too short (minimum is 6 characters)"
+    assert_includes @user_form.errors.messages[:address], "is invalid"
   end
 end
