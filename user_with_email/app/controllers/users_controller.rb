@@ -30,7 +30,8 @@ class UsersController < ApplicationController
     ActionController::Parameters.permit_all_parameters = true
     @user = User.new
     @email = Email.new
-    @user_form = UserForm.new(user: @user, email: @email)
+    #@user_form = UserForm.new(user: @user, email: @email)
+    @user_form = UserForm.new(user: @user)
     @user_form.submit(params)
 
     respond_to do |format|

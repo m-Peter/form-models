@@ -18,6 +18,7 @@ module FormObject
       name = self.class.root_model
       @factory = ModelFactory.new(params.slice(name))
       @factory.populate_model
+      assign_from_hash(@factory.models)
     end
 
     def save
@@ -28,12 +29,13 @@ module FormObject
 
     def valid?
       result = super
+      models = @factory.models.values
       
-      @models.each do |model|
+      models.each do |model|
         result &= model.valid?
       end
 
-      @models.each do |model|
+      models.each do |model|
         model.errors.each do |attribute, error|
           errors.add(attribute, error)
         end

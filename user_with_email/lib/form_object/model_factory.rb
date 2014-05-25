@@ -1,9 +1,10 @@
 module FormObject
   class ModelFactory
-    attr_reader :attributes, :model
+    attr_reader :attributes, :model, :models
 
     def initialize(attributes)
       @attributes = attributes
+      @models = {}
     end
 
     def populate_model
@@ -54,6 +55,8 @@ module FormObject
             :with_macro => macro,
           )
 
+          @models[assoc_name.to_sym] = associated_model
+
           # populator for the nested models, e.g HasOne for email
           populator_class = "FormObject::Populator::#{macro.to_s.camelize}".constantize
 
@@ -100,7 +103,8 @@ module FormObject
       association_reflection.macro
     end
 
-    ATTRIBUTES_KEY_REGEXP = /^(.+)_attributes$/
+    #ATTRIBUTES_KEY_REGEXP = /^(.+)_attributes$/
+    ATTRIBUTES_KEY_REGEXP = /^(.+)$/
 
     def find_association_name_in(key)
       ATTRIBUTES_KEY_REGEXP.match(key)[1]
@@ -108,7 +112,9 @@ module FormObject
 
     def create_root_model
       model_class = attributes.keys.first.to_s.camelize.constantize
-      model_class.new
+      model = model_class.new
+      @models[attributes.keys.first.to_sym] = model 
+      model
     end
   end
 end

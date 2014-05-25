@@ -23,10 +23,12 @@
     <%= f.label :gender %><br>
     <%= f.select :gender, User.get_genders_dropdown %>
   </div>
-  <div class="field">
-    <%= f.label :address %><br>
-    <%= text_field "user[email_attributes]", :address %>
+  <%= f.fields_for @user_form.email do |email_fields| %>
+    <div class="field">
+      <%= email_fields.label :address %><br>
+      <%= email_fields.text_field :address %>
   </div>
+  <% end %>
   <div class="actions">
     <%= f.submit %>
   </div>

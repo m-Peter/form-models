@@ -86,10 +86,14 @@ class FormObjectTest < ActiveSupport::TestCase
   test "submit incoming parameters" do
     @user_form.submit(@params)
 
-    assert_equal "Petros", @user_form.name
+    assert_equal "Petrakos", @user_form.name
+    assert_equal "Petrakos", @user_form.user.name
     assert_equal 23, @user_form.age
+    assert_equal 23, @user_form.user.age
     assert_equal 0, @user_form.gender
-    assert_equal "markoupetr@gmail.com", @user_form.address
+    assert_equal 0, @user_form.user.gender
+    assert_equal "petrakos@gmail.com", @user_form.address
+    assert_equal "petrakos@gmail.com", @user_form.email.address
   end
 
   test "perform validation" do

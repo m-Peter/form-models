@@ -46,6 +46,15 @@ class ModelFactoryTest < ActiveSupport::TestCase
     assert_equal 0, model.gender
   end
 
+  test "build the models" do
+    model = @factory.populate_model
+
+    assert_equal 2, @factory.models.size
+    assert_equal [:user, :email], @factory.models.keys
+    assert_instance_of User, @factory.models[:user]
+    assert_instance_of Email, @factory.models[:email]
+  end
+
   test "populates the nested model" do
     model = @factory.populate_model
 
