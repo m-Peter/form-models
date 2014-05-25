@@ -27,10 +27,11 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
+    ActionController::Parameters.permit_all_parameters = true
     @user = User.new
     @email = Email.new
     @user_form = UserForm.new(user: @user, email: @email)
-    @user_form.submit(user_params)
+    @user_form.submit(params)
 
     respond_to do |format|
       if @user_form.valid?

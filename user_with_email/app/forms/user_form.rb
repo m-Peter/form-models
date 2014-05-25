@@ -5,11 +5,4 @@ class UserForm < FormObject::Base
   attributes :address, of: :email
 
   self.root_model = :user
-
-  def save
-    ActiveRecord::Base.transaction do
-      user.email = email
-      user.save!
-    end
-  end
 end

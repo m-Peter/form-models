@@ -11,13 +11,19 @@ module FormObject
     end
 
     def submit(params)
-      params.each do |key, value|
-        send("#{key}=", value) if self.respond_to?(key)
-      end
+      #params.each do |key, value|
+      #  send("#{key}=", value) if self.respond_to?(key)
+      #end
 
       name = self.class.root_model
       @factory = ModelFactory.new(params.slice(name))
       @factory.populate_model
+    end
+
+    def save
+      ActiveRecord::Base.transaction do
+        @factory.save!
+      end
     end
 
     def valid?

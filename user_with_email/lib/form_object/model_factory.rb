@@ -21,6 +21,10 @@ module FormObject
       @model
     end
 
+    def save!
+      model.save!
+    end
+
     def create_populators_for(model, attributes)
       attributes.each_with_object([]) do |key_value, association_populators|
         # we are seeking a key whose values is a Hash

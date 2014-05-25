@@ -119,4 +119,12 @@ class FormObjectTest < ActiveSupport::TestCase
     @user_form.submit(@params)
     assert_instance_of User, @user_form.factory.model
   end
+
+  test "saves the models" do
+    @user_form.submit(@params)
+
+    assert_difference('User.count') do
+      @user_form.save
+    end
+  end
 end

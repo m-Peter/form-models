@@ -54,4 +54,12 @@ class ModelFactoryTest < ActiveSupport::TestCase
     assert_equal 0, model.gender
     assert_equal "petrakos@gmail.com", model.email.address
   end
+
+  test "saves the models" do
+    model = @factory.populate_model
+
+    assert_difference('User.count') do
+      @factory.save!
+    end
+  end
 end
