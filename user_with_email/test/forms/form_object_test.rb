@@ -35,7 +35,7 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_respond_to UserFormFixture, :attribute 
   end
 
-  test "creates accessors for single attribute" do
+  test "create accessors for single attribute" do
     @user_form.name = "Peter"
 
     assert_equal "Peter", @user_form.name
@@ -45,7 +45,7 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_respond_to UserFormFixture, :attributes
   end
 
-  test "creates accessors for many attributes" do
+  test "create accessors for many attributes" do
     @user_form.age = 23
     @user_form.gender = 0
 
@@ -53,18 +53,18 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal 0, @user_form.gender
   end
 
-  test "specifies the root model" do
+  test "specify the root model" do
     assert_equal :user, UserFormFixture.root_model
     assert_equal @user, @user_form.root_model
   end
 
-  test "delegates attribute to model" do
+  test "delegate attribute to its model" do
     @user_form.name = "Peter"
 
     assert_equal "Peter", @user.name
   end
 
-  test "delegate attributes to model" do
+  test "delegate attributes to their model" do
     @user_form.age = 23
     @user_form.gender = 0
 
@@ -78,12 +78,12 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal "markoupetr@gmail.com", @email.address
   end
 
-  test "keeps track of the models it represents" do
+  test "keep track of the models it represents" do
     assert_equal 2, UserFormFixture.models.size
     assert_equal [:user, :email], UserFormFixture.models
   end
 
-  test "submits incoming parameters" do
+  test "submit incoming parameters" do
     @user_form.submit(@params)
 
     assert_equal "Petros", @user_form.name
@@ -92,7 +92,7 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal "markoupetr@gmail.com", @user_form.address
   end
 
-  test "performs validation" do
+  test "perform validation" do
     @user_form.submit(@params)
 
     assert @user_form.valid?
