@@ -42,7 +42,7 @@ module FormObject
           # attributes that belong to assoc_name, e.g { "address" => "petrakos@gmail.com" }
           current_scope_attrs = params_for_current_scope(record_attrs)
 
-          # this is the builded associated model
+          # this is the resulting associated model
           associated_model = initialize_associated_model(
             current_scope_attrs,
             :for_association_name => assoc_name,
