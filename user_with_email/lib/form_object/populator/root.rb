@@ -1,6 +1,6 @@
 module FormObject
   module Populator
-    class RootPopulator < Abstract
+    class Root < Abstract
       def assign_to_parent
         # no-op
       end

@@ -13,7 +13,7 @@ class RootPopulatorTest < ActiveSupport::TestCase
       }
     )
 
-    @populator = FormObject::Populator::RootPopulator.new(@args)
+    @populator = FormObject::Populator::Root.new(@args)
   end
 
   test "contains the model, association_name and its attributes" do
