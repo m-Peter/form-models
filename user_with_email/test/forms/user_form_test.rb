@@ -20,12 +20,12 @@ class UserFormTest < ActiveSupport::TestCase
     @user_form = UserForm.new(user: @user, email: @email)
   end
 
-  test "should contain the objects it represents" do
+  test "contains the objects it represents" do
     assert_equal @user, @user_form.user
     assert_equal @email, @user_form.email
   end
 
-  test "should contain the attributes of the objects" do
+  test "contains the attributes of the objects" do
     attributes = [:name, :name=, :age, :age=, :gender, :gender=, :address, :address=]
 
     attributes.each do |attribute|
@@ -33,7 +33,7 @@ class UserFormTest < ActiveSupport::TestCase
     end
   end
 
-  test "should delegates the attributes to the objects" do
+  test "delegates the attributes to the objects" do
     @user_form.name = "Petrakos"
     @user_form.age = 23
     @user_form.gender = 0
@@ -45,8 +45,7 @@ class UserFormTest < ActiveSupport::TestCase
     assert_equal @user_form.address, @email.address
   end
 
-  test "should submit params" do
-    #params = { name: 'Petrakos', age: 23, gender: 0, address: 'petrakos@gmail.com' }
+  test "assigns submitted parameters to the appropriate attibutes" do
     @user_form.submit(@params)
 
     assert_equal @user_form.name, @params[:name]
@@ -55,15 +54,13 @@ class UserFormTest < ActiveSupport::TestCase
     assert_equal @user_form.address, @params[:address]
   end
 
-  test "submit should return true if the params are valid" do
-    #params = { name: 'Petrakos', age: 23, gender: 0, address: "petrakos@gmail.com" }
-    result = @user_form.submit(@params)
+  test "#valid? returns true for valid submitted parameters" do
+    @user_form.submit(@params)
 
-    assert result
+    assert @user_form.valid?
   end
 
-  test "#valid? should return false for invalid params" do
-    #params = { name: 'Petr', age: "12", gender: "male", address: 'petr' }
+  test "#valid? should return false for invalid submitted parameters" do
     @user_form.submit(@params)
 
     assert_not @user_form.valid?
@@ -71,8 +68,7 @@ class UserFormTest < ActiveSupport::TestCase
     assert_includes @user_form.errors.messages[:address], "is invalid"
   end
 
-  test "should save the models" do
-    #params = { name: 'Petrakos', age: 23, gender: 0, address: 'petrakos@gmail.com' }
+  test "saves the models" do
     @user_form.submit(@params)
 
     assert_difference('User.count') do
@@ -85,7 +81,7 @@ class UserFormTest < ActiveSupport::TestCase
     assert_equal @user.email, @email
   end
 
-  test "should update the models" do
+  test "updates the models" do
     user = User.create!(name: 'Petrakos', age: 23, gender: 0)
     email = Email.create!(address: 'petrakos@gmail.com')
     user_form = UserForm.new(user: user, email: email)
