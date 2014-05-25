@@ -58,6 +58,10 @@ module FormObject
       root_model.id.to_s
     end
 
+    def self.model_name
+      ActiveModel::Name.new(root_model.to_s.camelize.constantize)
+    end
+
     private
 
       def assign_from_hash(hash)

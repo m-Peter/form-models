@@ -26,6 +26,10 @@ class UserFormComplianceTest < ActiveSupport::TestCase
     assert_equal @user, @model.to_model
   end
 
+  test "responds to .model_name" do
+    assert_equal User.model_name, UserForm.model_name
+  end
+
   test "responds to #to_param" do
     assert_nil @model.to_param
 
