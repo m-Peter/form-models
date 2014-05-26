@@ -46,6 +46,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    ActionController::Parameters.permit_all_parameters = true
     @user_form = UserForm.new(user: @user, email: @user.email)
     @user_form.submit params
 
@@ -77,6 +78,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :age, :gender, :address)
+      params.require(:user).permit(:name, :age, :gender, email: [:address])
     end
 end
