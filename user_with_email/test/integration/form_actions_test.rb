@@ -12,7 +12,9 @@ class FormActionsTest < ActionDispatch::IntegrationTest
       name: "Petrakos",
       age: 23,
       gender: 0,
-      address: "petrakos@gmail.com"
+      email: {
+        address: "petrakos@gmail.com"
+      }
     }
     follow_redirect!
     assert_response :success
@@ -31,7 +33,9 @@ class FormActionsTest < ActionDispatch::IntegrationTest
       name: "Petran",
       age: 24,
       gender: 1,
-      address: "petran@gmail.com"
+      email: {
+        address: "petran@gmail.com"
+      }
     }
     follow_redirect!
     assert_response :success
@@ -48,7 +52,9 @@ class FormActionsTest < ActionDispatch::IntegrationTest
       name: "Petr",
       age: 23,
       gender: 0,
-      address: "petr"
+      email: {
+        address: "petr"
+      }
     }
     assert_response :success
     assert_template "new"
