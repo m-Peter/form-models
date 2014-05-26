@@ -11,10 +11,6 @@ module FormObject
     end
 
     def submit(params)
-      #params.each do |key, value|
-      #  send("#{key}=", value) if self.respond_to?(key)
-      #end
-
       name = self.class.root_model
       @factory = ModelFactory.new(params.slice(name))
       @factory.populate_model
@@ -74,17 +70,8 @@ module FormObject
 
       def assign_from_hash(hash)
         hash.each do |key, value|
-          add_model_on_list(value)
           send("#{key}=", value)
         end
-      end
-
-      def models
-        @models ||= []
-      end
-
-      def add_model_on_list(model)
-        models << model
       end
 
     class << self
