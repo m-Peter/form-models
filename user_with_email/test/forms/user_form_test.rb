@@ -8,9 +8,9 @@ class UserFormTest < ActiveSupport::TestCase
       "authenticity_token" => "some_token",
       "user" => {
         "name" => "Petrakos",
-        "age" => "23",
-        "gender" => "0",
-        "email_attributes" => {
+        "age" => 23,
+        "gender" => 0,
+        "email" => {
           "address" => "petrakos@gmail.com"
         }
       }
@@ -48,10 +48,10 @@ class UserFormTest < ActiveSupport::TestCase
   test "assigns submitted parameters to the appropriate attibutes" do
     @user_form.submit(@params)
 
-    assert_equal @user_form.name, @params[:name]
-    assert_equal @user_form.age, @params[:age]
-    assert_equal @user_form.gender, @params[:gender]
-    assert_equal @user_form.address, @params[:address]
+    assert_equal @user_form.name, @params[:user][:name]
+    assert_equal @user_form.age, @params[:user][:age]
+    assert_equal @user_form.gender, @params[:user][:gender]
+    assert_equal @user_form.address, @params[:user][:email][:address]
   end
 
   test "#valid? returns true for valid submitted parameters" do
@@ -61,6 +61,8 @@ class UserFormTest < ActiveSupport::TestCase
   end
 
   test "#valid? should return false for invalid submitted parameters" do
+    @params["user"]["name"] = "Petr"
+    @params["user"]["email"]["address"] = "petrakos"
     @user_form.submit(@params)
 
     assert_not @user_form.valid?
@@ -75,25 +77,21 @@ class UserFormTest < ActiveSupport::TestCase
       @user_form.save
     end
 
-    #assert @user_form.persisted?
-    #assert @user.persisted?
-    #assert @email.persisted?
-    #assert_equal @user.email, @email
+    assert @user_form.persisted?
+    assert @user_form.user.persisted?
+    assert @user_form.email.persisted?
+    assert_equal @user_form.email, @user_form.user.email
   end
 
   test "updates the models" do
-    user = User.create!(name: 'Petrakos', age: 23, gender: 0)
-    email = Email.create!(address: 'petrakos@gmail.com')
-    user_form = UserForm.new(user: user, email: email)
+    user = users(:peter)
+    user_form = UserForm.new(user: user, email: user.email)
 
     user_form.submit(@params)
+    user_form.save
 
-    assert_difference('User.count', 0) do
-      user_form.save
-    end
-
-    assert_equal "Petros", user_form.name
-    assert_equal "petran@gmail.com", user_form.address
+    assert_equal "Petrakos", user_form.name
+    assert_equal "petrakos@gmail.com", user_form.address
   end
 
 end

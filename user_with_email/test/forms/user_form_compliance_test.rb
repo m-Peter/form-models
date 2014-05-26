@@ -5,7 +5,7 @@ class UserFormComplianceTest < ActiveSupport::TestCase
 
   def setup
     @user = User.new(name: 'Petrakos', age: 23, gender: 0)
-    @model = UserForm.new(user: @user, email: Email.new)
+    @model = UserForm.new(user: @user)
   end
 
   test "responds to #persisted?" do

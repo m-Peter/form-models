@@ -17,7 +17,7 @@ class FormObjectTest < ActiveSupport::TestCase
         "name" => "Petrakos",
         "age" => "23",
         "gender" => "0",
-        "email_attributes" => {
+        "email" => {
           "address" => "petrakos@gmail.com"
         }
       }
