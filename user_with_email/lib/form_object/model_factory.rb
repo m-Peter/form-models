@@ -102,8 +102,7 @@ module FormObject
       association_reflection = model.class.reflect_on_association(association_name)
       association_reflection.macro
     end
-
-    #ATTRIBUTES_KEY_REGEXP = /^(.+)_attributes$/
+    
     ATTRIBUTES_KEY_REGEXP = /^(.+)$/
 
     def find_association_name_in(key)
