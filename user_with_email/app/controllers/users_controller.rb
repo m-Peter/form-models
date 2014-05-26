@@ -30,14 +30,13 @@ class UsersController < ApplicationController
     ActionController::Parameters.permit_all_parameters = true
     @user = User.new
     @email = Email.new
-    #@user_form = UserForm.new(user: @user, email: @email)
     @user_form = UserForm.new(user: @user)
     @user_form.submit(params)
 
     respond_to do |format|
       if @user_form.valid?
         @user_form.save
-        format.html { redirect_to @user_form, notice: "User: #{@user.name} was successfully created." }
+        format.html { redirect_to @user_form, notice: "User: #{@user_form.name} was successfully created." }
       else
         format.html { render :new }
       end
@@ -48,12 +47,12 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
     @user_form = UserForm.new(user: @user, email: @user.email)
-    @user_form.submit user_params
+    @user_form.submit params
 
     respond_to do |format|
       if @user_form.valid?
         @user_form.save
-        format.html { redirect_to @user_form, notice: "User: #{@user.name} was successfully updated." }
+        format.html { redirect_to @user_form, notice: "User: #{@user_form.name} was successfully updated." }
       else
         format.html { render :edit }
       end
