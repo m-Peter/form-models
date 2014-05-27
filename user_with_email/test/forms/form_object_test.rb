@@ -111,6 +111,11 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_difference('User.count') do
       @user_form.save
     end
+
+    assert_equal "Petrakos", @user_form.name
+    assert_equal 23, @user_form.age
+    assert_equal 0, @user_form.gender
+    assert_equal "petrakos@gmail.com", @user_form.address
   end
 
   test "updates the models" do
