@@ -36,9 +36,9 @@ class FormObjectTest < ActiveSupport::TestCase
   end
 
   test "create accessors for single attribute" do
-    @user_form.name = "Peter"
-
-    assert_equal "Peter", @user_form.name
+    [:name, :name=].each do |attribute|
+      assert_respond_to @user_form, attribute
+    end
   end
 
   test "describe many attributes" do
@@ -46,36 +46,14 @@ class FormObjectTest < ActiveSupport::TestCase
   end
 
   test "create accessors for many attributes" do
-    @user_form.age = 23
-    @user_form.gender = 0
-
-    assert_equal 23, @user_form.age
-    assert_equal 0, @user_form.gender
+    [:age, :age=, :gender, :gender=].each do |attribute|
+      assert_respond_to @user_form, attribute
+    end
   end
 
   test "specify the root model" do
     assert_equal :user, UserFormFixture.root_model
     assert_equal @user, @user_form.root_model
-  end
-
-  test "delegate attribute to its model" do
-    @user_form.name = "Peter"
-
-    assert_equal "Peter", @user.name
-  end
-
-  test "delegate attributes to their model" do
-    @user_form.age = 23
-    @user_form.gender = 0
-
-    assert_equal 23, @user.age
-    assert_equal 0, @user.gender
-  end
-
-  test "delegate attributes to different models" do
-    @user_form.address = "markoupetr@gmail.com"
-
-    assert_equal "markoupetr@gmail.com", @email.address
   end
 
   test "keep track of the models it represents" do
@@ -88,10 +66,13 @@ class FormObjectTest < ActiveSupport::TestCase
 
     assert_equal "Petrakos", @user_form.name
     assert_equal "Petrakos", @user_form.user.name
+
     assert_equal 23, @user_form.age
     assert_equal 23, @user_form.user.age
+    
     assert_equal 0, @user_form.gender
     assert_equal 0, @user_form.user.gender
+    
     assert_equal "petrakos@gmail.com", @user_form.address
     assert_equal "petrakos@gmail.com", @user_form.email.address
   end
@@ -101,8 +82,9 @@ class FormObjectTest < ActiveSupport::TestCase
 
     assert @user_form.valid?
 
-    @user_form.name = "Petr"
-    @user_form.address = "petrakos"
+    @params[:user][:name] = "Petr"
+    @params[:user][:email][:address] = "petrakos"
+    @user_form.submit(@params)
 
     assert_not @user_form.valid?
     assert_includes @user_form.errors.messages[:name], "is too short (minimum is 6 characters)"
