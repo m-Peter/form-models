@@ -12,8 +12,8 @@ class ModelFactoryTest < ActiveSupport::TestCase
         }
       }
     )
-    
-    @factory = FormObject::ModelFactory.new(@params)
+    @user = User.new
+    @factory = FormObject::ModelFactory.new(@user, @params)
   end
 
   test "contains the attributes" do

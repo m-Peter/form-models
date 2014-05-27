@@ -6,13 +6,18 @@ module FormObject
 
     attr_reader :factory
 
-    def initialize(models={})
-      assign_from_hash(models)
+    def initialize(model)
+      @user = model
+      if @user.new_record?
+        @email = @user.build_email
+      else
+        @email = @user.email
+      end
     end
 
     def submit(params)
       name = self.class.root_model
-      @factory = ModelFactory.new(params.slice(name))
+      @factory = ModelFactory.new(@user, params.slice(name))
       @factory.populate_model
       assign_from_hash(@factory.models)
     end

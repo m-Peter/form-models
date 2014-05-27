@@ -23,8 +23,7 @@ class FormObjectTest < ActiveSupport::TestCase
       }
     )
     @user = User.new
-    @email = Email.new
-    @user_form = UserFormFixture.new(user: @user, email: @email)
+    @user_form = UserFormFixture.new(@user)
   end
 
   test "create a new FormObject" do
@@ -112,5 +111,19 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_difference('User.count') do
       @user_form.save
     end
+  end
+
+  test "updates the models" do
+    user = users(:peter)
+    user_form = UserForm.new(user)
+
+    user_form.submit(@params)
+    
+    assert_difference('User.count', 0) do
+      user_form.save
+    end
+
+    assert_equal "Petrakos", user_form.name
+    assert_equal "petrakos@gmail.com", user_form.address
   end
 end

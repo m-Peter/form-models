@@ -2,14 +2,16 @@ module FormObject
   class ModelFactory
     attr_reader :attributes, :model, :models
 
-    def initialize(attributes)
+    def initialize(model, attributes)
+      @model = model
       @attributes = attributes
       @models = {}
+      @models[attributes.keys.first.to_sym] = model
     end
 
     def populate_model
-      @model = create_root_model
-
+      #@model = create_root_model
+      
       @populators = [FormObject::Populator::Root.new(root_populator_args)]
       @populators.concat(
         create_populators_for(model, attributes.values.first).flatten
@@ -89,7 +91,11 @@ module FormObject
       
       case macro
       when :has_one
-        model.send("build_#{association_name}")
+        if model.new_record?
+          model.send("build_#{association_name}")
+        else
+          model.send("#{association_name}")
+        end
       end
     end
 
@@ -112,7 +118,7 @@ module FormObject
     def create_root_model
       model_class = attributes.keys.first.to_s.camelize.constantize
       model = model_class.new
-      @models[attributes.keys.first.to_sym] = model 
+      @models[attributes.keys.first.to_sym] = model
       model
     end
   end

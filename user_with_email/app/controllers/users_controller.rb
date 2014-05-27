@@ -15,13 +15,12 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     @user = User.new
-    @email = Email.new
-    @user_form = UserForm.new(user: @user, email: @email)
+    @user_form = UserForm.new(@user)
   end
 
   # GET /users/1/edit
   def edit
-    @user_form = UserForm.new(user: @user, email: @user.email)
+    @user_form = UserForm.new(@user)
   end
 
   # POST /users
@@ -29,8 +28,7 @@ class UsersController < ApplicationController
   def create
     ActionController::Parameters.permit_all_parameters = true
     @user = User.new
-    @email = Email.new
-    @user_form = UserForm.new(user: @user)
+    @user_form = UserForm.new(@user)
     @user_form.submit(params)
 
     respond_to do |format|
@@ -47,7 +45,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
     ActionController::Parameters.permit_all_parameters = true
-    @user_form = UserForm.new(user: @user, email: @user.email)
+    @user_form = UserForm.new(@user)
     @user_form.submit params
 
     respond_to do |format|

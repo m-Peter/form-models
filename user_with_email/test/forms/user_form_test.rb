@@ -16,8 +16,7 @@ class UserFormTest < ActiveSupport::TestCase
       }
     )
     @user = User.new
-    @email = Email.new
-    @user_form = UserForm.new(user: @user, email: @email)
+    @user_form = UserForm.new(@user)
   end
 
   test "contains the attributes of the objects" do
@@ -68,12 +67,15 @@ class UserFormTest < ActiveSupport::TestCase
 
   test "updates the models" do
     user = users(:peter)
-    user_form = UserForm.new(user: user, email: user.email)
+    user_form = UserForm.new(user)
 
     user_form.submit(@params)
     user_form.save
 
     assert_equal "Petrakos", user_form.name
+    assert_equal "Petrakos", user_form.user.name
+
+    assert_equal "petrakos@gmail.com", user_form.address
     assert_equal "petrakos@gmail.com", user_form.address
   end
 
