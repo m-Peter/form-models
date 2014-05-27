@@ -20,29 +20,12 @@ class UserFormTest < ActiveSupport::TestCase
     @user_form = UserForm.new(user: @user, email: @email)
   end
 
-  test "contains the objects it represents" do
-    assert_equal @user, @user_form.user
-    assert_equal @email, @user_form.email
-  end
-
   test "contains the attributes of the objects" do
     attributes = [:name, :name=, :age, :age=, :gender, :gender=, :address, :address=]
 
     attributes.each do |attribute|
       assert_respond_to @user_form, attribute
     end
-  end
-
-  test "delegates the attributes to the objects" do
-    @user_form.name = "Petrakos"
-    @user_form.age = 23
-    @user_form.gender = 0
-    @user_form.address = "petrakos@gmail.com"
-
-    assert_equal @user_form.name, @user.name
-    assert_equal @user_form.age, @user.age
-    assert_equal @user_form.gender, @user.gender
-    assert_equal @user_form.address, @email.address
   end
 
   test "assigns submitted parameters to the appropriate attibutes" do
