@@ -48,10 +48,10 @@ class UserFormTest < ActiveSupport::TestCase
   test "assigns submitted parameters to the appropriate attibutes" do
     @user_form.submit(@params)
 
-    assert_equal @user_form.name, @params[:user][:name]
-    assert_equal @user_form.age, @params[:user][:age]
-    assert_equal @user_form.gender, @params[:user][:gender]
-    assert_equal @user_form.address, @params[:user][:email][:address]
+    assert_equal "Petrakos", @user_form.name
+    assert_equal 23, @user_form.age
+    assert_equal 0, @user_form.gender
+    assert_equal "petrakos@gmail.com", @user_form.address
   end
 
   test "#valid? returns true for valid submitted parameters" do
