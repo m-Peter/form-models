@@ -70,7 +70,10 @@ class UserFormTest < ActiveSupport::TestCase
     user_form = UserForm.new(user)
 
     user_form.submit(@params)
-    user_form.save
+    
+    assert_difference('User.count', 0) do
+      user_form.save
+    end
 
     assert_equal "Petrakos", user_form.name
     assert_equal "Petrakos", user_form.user.name
