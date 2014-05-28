@@ -113,11 +113,5 @@ module FormObject
       ATTRIBUTES_KEY_REGEXP.match(key)[1]
     end
 
-    def create_root_model
-      model_class = attributes.keys.first.to_s.camelize.constantize
-      model = model_class.new
-      @models[attributes.keys.first.to_sym] = model
-      model
-    end
   end
 end
