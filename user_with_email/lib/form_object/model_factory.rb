@@ -6,7 +6,7 @@ module FormObject
       @model = model
       @attributes = attributes
       @models = {}
-      @models[attributes.keys.first.to_sym] = model
+      add_to_models(model, attributes.keys.first.to_sym)
     end
 
     def populate_model
@@ -27,6 +27,10 @@ module FormObject
     end
 
     private
+
+    def add_to_models(model, key)
+      @models[key] = model
+    end
 
     def create_populators_for(model, attributes)
       attributes.each_with_object([]) do |key_value, association_populators|
@@ -57,7 +61,7 @@ module FormObject
             :with_macro => macro,
           )
 
-          @models[assoc_name.to_sym] = associated_model
+          add_to_models(associated_model, assoc_name.to_sym)
 
           # populator for the nested models, e.g HasOne for email
           populator_class = "FormObject::Populator::#{macro.to_s.camelize}".constantize

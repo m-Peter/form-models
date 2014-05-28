@@ -24,20 +24,6 @@ class ModelFactoryTest < ActiveSupport::TestCase
     assert_instance_of User, @factory.populate_model
   end
 
-  test "composes the arguments for the root populator" do
-    args = ActiveSupport::HashWithIndifferentAccess.new(
-      model: @factory.populate_model,
-      attrs: {
-        "name" => "Petrakos",
-        "age" => "23",
-        "gender" => "0",
-      },
-      association_name: "user"
-    )
-
-    assert_equal args, @factory.root_populator_args
-  end
-
   test "populates the root model" do
     model = @factory.populate_model
 
