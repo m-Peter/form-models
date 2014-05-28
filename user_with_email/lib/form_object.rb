@@ -71,14 +71,6 @@ module FormObject
       ActiveModel::Name.new(root_model.to_s.camelize.constantize)
     end
 
-    private
-
-      def assign_from_hash(hash)
-        hash.each do |key, value|
-          send("#{key}=", value)
-        end
-      end
-
     class << self
       def root_model=(model)
         @@root_model = model
@@ -125,6 +117,14 @@ module FormObject
           models << model_name unless models.include?(model_name)
         end
 
+    end
+
+    private
+    
+    def assign_from_hash(hash)
+      hash.each do |key, value|
+        send("#{key}=", value)
+      end
     end
 
   end
