@@ -16,7 +16,6 @@ class UsersControllerTest < ActionController::TestCase
     get :new
 
     assert_response :success
-    assert_not_nil assigns(:user)
     assert_not_nil assigns(:user_form)
     assert_instance_of UserForm, assigns(:user_form)
   end
