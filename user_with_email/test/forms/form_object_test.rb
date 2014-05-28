@@ -6,6 +6,9 @@ class UserFormFixture < FormObject::Base
   attribute :address, of: :email
 
   self.root_model = :user
+
+  validates :name, length: { in: 6..20 }
+  validates_format_of :address, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
 end
 
 class FormObjectTest < ActiveSupport::TestCase
