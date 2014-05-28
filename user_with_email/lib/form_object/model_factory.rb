@@ -10,12 +10,12 @@ module FormObject
     end
 
     def populate_model
-      @populators = [FormObject::Populator::Root.new(root_populator_args)]
-      @populators.concat(
+      populators = [FormObject::Populator::Root.new(root_populator_args)]
+      populators.concat(
         create_populators_for(model, attributes.values.first).flatten
       )
 
-      @populators.each do |p|
+      populators.each do |p|
         p.call
       end
 
