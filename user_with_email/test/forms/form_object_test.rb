@@ -58,11 +58,6 @@ class FormObjectTest < ActiveSupport::TestCase
     assert_equal @user, @user_form.root_model
   end
 
-  test "keep track of the models it represents" do
-    assert_equal 2, UserFormFixture.models.size
-    assert_equal [:user, :email], UserFormFixture.models
-  end
-
   test "submit incoming parameters" do
     @user_form.submit(@params)
 
