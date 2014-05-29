@@ -32,20 +32,27 @@ module FormObject
       @models[key] = model
     end
 
+    def contains_association?(key_value)
+      key_value[1].is_a?(Hash)
+    end
+
+    def attributes_for_macro(attributes, macro)
+      case macro
+      when :has_one
+        [attributes]
+      end
+    end
+
     def create_populators_for(model, attributes)
       attributes.each_with_object([]) do |key_value, association_populators|
-        # we are seeking a key whose values is a Hash
-        # e.g { "email_attributes" => { "address" => "petrakos@gmail.com" } }
-        next unless key_value[1].is_a?(Hash)
-        key, value = key_value # split the value in two parts
-        # the type of association(has_one for the above example), e.g has_one, has_many
+        # we are seeking a key whose value is a Hash
+        # e.g { "email" => { "address" => "petrakos@gmail.com" } }
+        next unless contains_association?(key_value)
+        key, value = key_value # split the Hash in two parts(key, value)
+        # the type of association, e.g :has_one, :has_many
         macro = macro_for_attribute_key(key)
-        # attributes of the association e.g [{ "address" => "petrakos@gmail.com" }]
-        associated_attrs = 
-          case macro
-          when :has_one
-            [value]
-          end
+        # attributes of the association, e.g [{ "address" => "petrakos@gmail.com" }]
+        associated_attrs = attributes_for_macro(value, macro)
 
         associated_attrs.inject(association_populators) do |populators, record_attrs|
           # the name of the association, e.g email
