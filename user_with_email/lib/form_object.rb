@@ -1,8 +1,6 @@
 module FormObject
   class Base
-    include ActiveModel::Conversion
-    include ActiveModel::Validations
-    extend ActiveModel::Naming
+    include ActiveModel::Model
 
     attr_reader :factory
 
