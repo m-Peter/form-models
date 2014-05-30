@@ -71,11 +71,11 @@ class UsersController < ApplicationController
     end
 
     def create_new_form
-      @user_form = UserForm.new(User.new)
+      @user_form = UserForm.new(user: User.new, email: Email.new)
     end
 
     def create_edit_form
-      @user_form = UserForm.new(user)
+      @user_form = UserForm.new(user: user, email: user.email)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

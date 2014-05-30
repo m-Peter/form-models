@@ -4,13 +4,8 @@ module FormObject
 
     attr_reader :factory
 
-    def initialize(model)
-      @user = model
-      if @user.new_record?
-        @email = @user.build_email
-      else
-        @email = @user.email
-      end
+    def initialize(models={})
+      assign_from_hash(models)
     end
 
     def submit(params)

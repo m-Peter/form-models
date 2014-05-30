@@ -26,7 +26,8 @@ class FormObjectTest < ActiveSupport::TestCase
       }
     )
     @user = User.new
-    @user_form = UserFormFixture.new(@user)
+    @email = Email.new
+    @user_form = UserFormFixture.new(user: @user, email: @email)
   end
 
   test "create a new FormObject" do
@@ -118,7 +119,7 @@ class FormObjectTest < ActiveSupport::TestCase
 
   test "updates the models" do
     user = users(:peter)
-    user_form = UserForm.new(user)
+    user_form = UserForm.new(user: user, email: user.email)
 
     user_form.submit(@params)
     
