@@ -25,15 +25,9 @@ module FormObject
       result = super
       models = @factory.models.values
       
-      models.each do |model|
-        result &= model.valid?
-      end
+      result &= validate_models(models)
 
-      models.each do |model|
-        model.errors.each do |attribute, error|
-          errors.add(attribute, error)
-        end
-      end
+      collect_errors_from(models)
 
       result
     end
@@ -107,6 +101,20 @@ module FormObject
     def assign_from_hash(hash)
       hash.each do |key, value|
         send("#{key}=", value)
+      end
+    end
+
+    def collect_errors_from(models)
+      models.each do |model|
+        model.errors.each do |attribute, error|
+          errors.add(attribute, error)
+        end
+      end
+    end
+
+    def validate_models(models)
+      models.each do |model|
+        result &= model.valid?
       end
     end
 
