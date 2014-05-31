@@ -114,8 +114,10 @@ module FormObject
 
     def validate_models(models)
       models.each do |model|
-        result &= model.valid?
+        return false unless model.valid?
       end
+
+      true
     end
 
   end
