@@ -1,11 +1,11 @@
 require 'test_helper'
 
 class UserFormFixture < FormObject::Base
-  self.root_model = :user
-
-  attribute :name
-  attributes :age, :gender
+  attribute :name, of: :user
+  attributes :age, :gender, of: :user
   attribute :address, of: :email
+
+  self.root_model = :user
 
   validates :name, length: { in: 6..20 }
   validates_format_of :address, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
