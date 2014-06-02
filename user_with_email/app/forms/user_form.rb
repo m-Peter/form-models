@@ -1,8 +1,8 @@
 class UserForm < FormObject::Base
-  attributes :name, :age, :gender, of: :user
-  attributes :address, of: :email
-
   self.root_model = :user
+  
+  attributes :name, :age, :gender
+  attributes :address, of: :email
 
   validates :name, :age, :gender, presence: true
   validates :name, length: { in: 6..20 }

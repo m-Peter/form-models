@@ -69,7 +69,7 @@ module FormObject
 
       def attributes(*names, of: nil)
         if of.nil?
-          attr_accessor *names
+          delegate_to_model(names, root_model)
         else
           delegate_to_model(names, of)
         end
