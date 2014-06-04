@@ -22,14 +22,13 @@ module FormObject
     end
 
     def valid?
-      result = super
+      super
       models = @factory.models.values
       
-      result &= validate_models(models)
-
+      validate_models(models)
       collect_errors_from(models)
 
-      result
+      errors.empty?
     end
 
     def root_model
@@ -114,10 +113,8 @@ module FormObject
 
     def validate_models(models)
       models.each do |model|
-        return false unless model.valid?
+        model.valid?
       end
-
-      true
     end
 
   end
